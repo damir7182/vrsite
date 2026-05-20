@@ -2,605 +2,1645 @@
 <html lang="kk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мектептегі VR технологиясы | Толық практикалық тапсырмалар</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>VR Mektep | Толық платформа</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- MathJax for LaTeX mathematical equations rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
             --bg: #f0f4f8;
-            --surface: #ffffff;
+            --surface: rgba(255, 255, 255, 0.75);
             --primary: #4f46e5;
             --primary-dark: #3730a3;
-            --primary-light: #e0e7ff;
             --accent: #06b6d4;
-            --accent-light: #cffafe;
             --text: #1e293b;
             --text-secondary: #475569;
             --text-light: #64748b;
-            --border: #e2e8f0;
+            --border: rgba(255, 255, 255, 0.6);
             --success: #10b981;
-            --success-light: #d1fae5;
-            --warning: #f59e0b;
-            --warning-light: #fef3c7;
             --danger: #ef4444;
-            --danger-light: #fee2e2;
-            --radius: 16px;
-            --radius-sm: 10px;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            --shadow-lg: 0 20px 40px -8px rgba(0,0,0,0.1);
-            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.15);
-            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --radius: 24px;
+            --radius-sm: 14px;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.1);
+            --transition: 0.3s ease;
+            --glass: rgba(255, 255, 255, 0.7);
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
         }
-        *{margin:0;padding:0;box-sizing:border-box;}
-        html{scroll-behavior:smooth;scroll-padding-top:80px;}
-        body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;}
-        .navbar{
-            position:sticky;top:0;z-index:1000;background:rgba(255,255,255,0.85);
-            backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-            border-bottom:1px solid var(--border);padding:0 2rem;display:flex;
-            align-items:center;justify-content:space-between;height:68px;transition:var(--transition);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font);
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0f4f8 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        .navbar.scrolled{box-shadow:var(--shadow-lg);}
-        .nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.2rem;color:var(--primary);text-decoration:none;}
-        .nav-logo svg{width:38px;height:38px;}
-        .nav-links{display:flex;list-style:none;gap:0.3rem;flex-wrap:wrap;}
-        .nav-links a{text-decoration:none;color:var(--text-secondary);font-weight:500;padding:0.55rem 1rem;border-radius:50px;transition:var(--transition);font-size:0.92rem;}
-        .nav-links a:hover,.nav-links a.active{background:var(--primary-light);color:var(--primary);}
-        .mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:8px;border-radius:8px;}
-        .mobile-menu-btn svg{width:26px;height:26px;stroke:var(--text);}
-        .hero{
-            background:linear-gradient(135deg,#1e1b4b,#312e81 30%,#4f46e5 60%,#06b6d4);
-            color:#fff;padding:5rem 2rem;text-align:center;position:relative;overflow:hidden;
+        .navbar {
+            position: sticky; top: 20px; z-index: 1000;
+            width: 90%; max-width: 1200px; margin: 0 auto;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 100px;
+            padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+            height: 68px; box-shadow: var(--shadow);
         }
-        .hero::before{
-            content:'';position:absolute;inset:0;
-            background:radial-gradient(circle at 20% 50%,rgba(255,255,255,0.08),transparent 60%),
-            radial-gradient(circle at 80% 20%,rgba(6,182,212,0.2),transparent 50%);
+        .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.3rem; color: var(--primary); cursor: pointer; }
+        .nav-logo svg { width: 38px; height: 38px; }
+        .nav-links { display: flex; list-style: none; gap: 0.3rem; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-secondary); font-weight: 600;
+            padding: 0.5rem 1.2rem; border-radius: 50px; transition: var(--transition);
+            font-size: 0.9rem; cursor: pointer; border: 1px solid transparent;
         }
-        .hero-content{position:relative;z-index:1;max-width:800px;margin:0 auto;}
-        .hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;margin-bottom:1rem;line-height:1.2;}
-        .hero p{font-size:1.15rem;opacity:0.9;margin-bottom:2rem;max-width:600px;margin-inline:auto;}
-        .btn{
-            display:inline-flex;align-items:center;gap:8px;padding:0.8rem 1.8rem;border-radius:50px;
-            font-weight:600;font-size:1rem;cursor:pointer;transition:var(--transition);text-decoration:none;
-            border:none;font-family:var(--font);
+        .nav-links a:hover,
+        .nav-links a.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25); }
+        .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--text); }
+        .page { display: none; animation: fadeSlide 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .hero {
+            min-height: 90vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; position: relative; padding: 2rem;
         }
-        .btn-primary{background:#fff;color:#4f46e5;}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,0.2);}
-        .btn-outline{background:transparent;border:2px solid rgba(255,255,255,0.6);color:#fff;}
-        .btn-outline:hover{background:rgba(255,255,255,0.1);}
-        .btn-sm{padding:0.5rem 1.2rem;font-size:0.85rem;}
-        .btn-accent{background:var(--accent);color:#fff;}
-        .btn-accent:hover{background:#0891b2;transform:translateY(-2px);}
-        .btn-success{background:var(--success);color:#fff;}
-        .btn-danger{background:var(--danger);color:#fff;}
-        .btn-danger:hover{background:#dc2626;}
-        .section{padding:4rem 2rem;max-width:1100px;margin:0 auto;}
-        .section-header{text-align:center;margin-bottom:3rem;}
-        .section-header h2{font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;}
-        .section-header p{color:var(--text-light);font-size:1.05rem;}
-        .section-divider{width:60px;height:4px;background:var(--primary);border-radius:2px;margin:0.8rem auto 0;}
+        .hero-bg { position: absolute; inset: 0; background: radial-gradient(circle at 30% 40%, rgba(79, 70, 229, 0.12) 0%, transparent 60%); }
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+        .vr-svg { width: 220px; margin: 0 auto 2rem; filter: drop-shadow(0 20px 30px rgba(79, 70, 229, 0.3)); animation: float 5s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(to right, #4f46e5, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2.5rem; }
+        
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 0.9rem 2rem;
+            border-radius: 100px; font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: var(--transition); border: none; font-family: var(--font);
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #6366f1); color: #fff; box-shadow: 0 12px 28px rgba(79, 70, 229, 0.4); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 18px 35px rgba(79, 70, 229, 0.5); }
+        .btn-glass { background: var(--glass); backdrop-filter: blur(10px); color: var(--primary); border: 1px solid var(--border); }
+        .btn-glass:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .section-divider { width: 70px; height: 5px; background: linear-gradient(to right, var(--primary), var(--accent)); border-radius: 10px; margin: 1rem auto 0; }
 
-        /* Theory */
-        .theory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
-        .theory-card{background:var(--surface);border-radius:var(--radius);padding:1.8rem;box-shadow:var(--shadow);border:1px solid var(--border);transition:var(--transition);cursor:pointer;}
-        .theory-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);border-color:var(--primary-light);}
-        .theory-card .icon-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.4rem;}
-        .icon-blue{background:#e0e7ff;color:#4f46e5;} .icon-cyan{background:#cffafe;color:#06b6d4;}
-        .icon-green{background:#d1fae5;color:#10b981;} .icon-amber{background:#fef3c7;color:#f59e0b;}
-        .icon-purple{background:#ede9fe;color:#7c3aed;} .icon-rose{background:#ffe4e6;color:#e11d48;}
-        .icon-teal{background:#ccfbf1;color:#0d9488;}
-        .theory-card h3{font-size:1.2rem;margin-bottom:0.5rem;}
-        .theory-card p{color:var(--text-light);font-size:0.9rem;}
-        .expand-hint{display:inline-block;margin-top:0.8rem;font-size:0.8rem;color:var(--primary);font-weight:600;}
-        .theory-detail{display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);animation:fadeIn 0.4s ease;}
-        .theory-card.expanded .theory-detail{display:block;}
-        .theory-detail ul{list-style:disc;padding-left:1.3rem;color:var(--text-secondary);font-size:0.9rem;}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-
-        /* Tests */
-        .test-container{background:var(--surface);border-radius:var(--radius);padding:2.5rem;box-shadow:var(--shadow-lg);border:1px solid var(--border);max-width:750px;margin:0 auto;}
-        .test-nav-tabs{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;justify-content:center;}
-        .test-tab{padding:0.6rem 1.4rem;border-radius:50px;border:2px solid var(--border);background:var(--surface);cursor:pointer;font-weight:600;font-size:0.9rem;transition:var(--transition);font-family:var(--font);color:var(--text-secondary);}
-        .test-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
-        .test-tab:hover:not(.active){border-color:var(--primary-light);background:var(--primary-light);}
-        .quiz-question{margin-bottom:1.8rem;animation:fadeIn 0.3s ease;}
-        .quiz-question h4{font-size:1.1rem;margin-bottom:1rem;font-weight:600;}
-        .quiz-option{display:block;padding:0.9rem 1.2rem;margin-bottom:0.6rem;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);font-size:0.95rem;background:#fafbfc;}
-        .quiz-option:hover{border-color:var(--primary-light);background:#f8faff;}
-        .quiz-option.selected{border-color:var(--primary);background:var(--primary-light);font-weight:600;}
-        .quiz-option.correct{border-color:var(--success)!important;background:var(--success-light)!important;}
-        .quiz-option.incorrect{border-color:var(--danger)!important;background:var(--danger-light)!important;}
-
-        /* Tasks – кеңейтілген */
-        .tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem;}
-        .task-card{
-            background:var(--surface);border-radius:var(--radius);padding:1.8rem;box-shadow:var(--shadow);
-            border:1px solid var(--border);transition:var(--transition);position:relative;
-            display:flex;flex-direction:column;
+        .theory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; }
+        .theory-card {
+            background: var(--surface); backdrop-filter: blur(10px); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); cursor: pointer;
+            transition: var(--transition); overflow: hidden; display: flex; flex-direction: column;
         }
-        .task-card:hover{box-shadow:var(--shadow-lg);}
-        .task-card .task-number{
-            position:absolute;top:-14px;left:20px;background:var(--primary);color:#fff;
-            width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-            font-weight:700;box-shadow:var(--shadow);
+        .theory-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-5px); }
+        .theory-card h3 { font-size: 1.2rem; font-weight: 750; margin-bottom: 0.5rem; color: var(--text); }
+        .theory-card p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem; flex-grow: 1; }
+        .theory-img {
+            width: 100%; height: 160px; object-fit: cover; border-radius: var(--radius-sm);
+            margin-bottom: 1rem; background: #e2e8f0; transition: transform 0.3s;
         }
-        .task-card h3{margin-top:0.8rem;margin-bottom:0.5rem;font-size:1.1rem;}
-        .task-card .task-desc{color:var(--text-light);font-size:0.9rem;margin-bottom:1rem;flex-grow:1;}
-        .task-steps-short{list-style:none;padding:0;margin-bottom:1rem;border-top:1px solid #f1f5f9;padding-top:0.8rem;}
-        .task-steps-short li{padding:0.3rem 0;font-size:0.85rem;color:var(--text-secondary);display:flex;align-items:flex-start;gap:8px;}
-        .task-steps-short li::before{content:'•';color:var(--primary);font-weight:700;}
-        .task-full-detail{display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);animation:fadeIn 0.4s ease;}
-        .task-card.expanded .task-full-detail{display:block;}
-        .task-full-detail ol{padding-left:1.3rem;color:var(--text-secondary);font-size:0.9rem;}
-        .task-full-detail ol li{margin-bottom:0.7rem;}
-        .task-actions{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:auto;}
-        .task-check-btn,.task-detail-btn{flex:1;min-width:120px;}
-        .task-completed-badge{display:inline-block;background:var(--success-light);color:var(--success);padding:0.2rem 0.8rem;border-radius:50px;font-size:0.75rem;font-weight:600;margin-left:0.5rem;}
+        .theory-card:hover .theory-img { transform: scale(1.03); }
 
-        /* Gallery */
-        .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.2rem;}
-        .gallery-item{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);transition:var(--transition);}
-        .gallery-item:hover{transform:translateY(-4px);box-shadow:var(--shadow-xl);}
-        .gallery-img-wrap{width:100%;height:200px;overflow:hidden;background:#e2e8f0;}
-        .gallery-img-wrap svg,.gallery-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
-        .gallery-caption{padding:1rem;font-size:0.85rem;color:var(--text-secondary);font-weight:500;display:flex;justify-content:space-between;align-items:center;}
-        .delete-img-btn{background:var(--danger-light);color:var(--danger);border:none;border-radius:8px;padding:0.3rem 0.7rem;font-size:0.75rem;cursor:pointer;font-weight:600;}
-        .delete-img-btn:hover{background:var(--danger);color:#fff;}
-        .upload-zone{border:3px dashed var(--border);border-radius:var(--radius);padding:2.5rem;text-align:center;cursor:pointer;transition:var(--transition);background:#fafbfc;margin-bottom:2rem;}
-        .upload-zone:hover{border-color:var(--primary);background:var(--primary-light);}
-        .upload-zone input{display:none;}
+        /* Tests Layout */
+        .test-container { background: var(--surface); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; box-shadow: var(--shadow-lg); max-width: 650px; margin: 0 auto; }
+        .test-tabs { display: flex; gap: 0.8rem; margin-bottom: 2rem; justify-content: center; flex-wrap: wrap; }
+        .test-tab {
+            padding: 0.7rem 1.6rem; border-radius: 100px; border: 2px solid var(--border);
+            background: var(--glass); cursor: pointer; font-weight: 700; transition: var(--transition);
+            color: var(--text-secondary); font-size: 0.9rem;
+        }
+        .test-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3); }
+        .quiz-option { display: block; padding: 1rem 1.4rem; margin-bottom: 0.8rem; border: 2px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition); background: rgba(255, 255, 255, 0.8); }
+        .quiz-option:hover { border-color: var(--primary); background: #fff; }
+        .quiz-option.selected { border-color: var(--primary); background: #e0e7ff; font-weight: 600; }
 
-        /* VR Room */
-        .vr-room-container{display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;}
-        .vr-upload-panel{flex:1;min-width:280px;background:var(--surface);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);border:1px solid var(--border);}
-        .vr-upload-panel h3{margin-bottom:1.5rem;text-align:center;}
-        .vr-input-group{margin-bottom:1.2rem;display:flex;flex-direction:column;gap:4px;}
-        .vr-input-group label{font-weight:600;font-size:0.9rem;color:var(--text);}
-        .vr-input-group input{width:100%;padding:0.5rem;border:2px solid var(--border);border-radius:8px;font-family:var(--font);}
-        .vr-preview-box{flex:2;min-width:340px;background:#000;border-radius:var(--radius);overflow:hidden;position:relative;box-shadow:var(--shadow-xl);aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;color:#fff;flex-direction:column;}
-        .vr-preview-box canvas{display:block;width:100%;height:100%;}
-        .vr-controls{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem;}
-        .footer{background:#1e293b;color:#cbd5e1;text-align:center;padding:2rem;font-size:0.9rem;}
+        .pano-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+        .pano-card { background: var(--surface); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: var(--transition); }
+        .pano-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-5px); }
+        .pano-thumb { height: 180px; background: linear-gradient(45deg, #1e1b4b, #312e81); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; gap: 8px; }
+        .pano-thumb span { font-size: 3rem; }
+        .pano-info { padding: 1.2rem; font-weight: 600; text-align: center; background: #fff; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { width: 90%; height: 85%; position: relative; border-radius: var(--radius); overflow: hidden; background: #000; }
+        .modal-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 2010; transition: 0.2s; }
+        .modal-close:hover { transform: scale(1.1); }
 
-        @media(max-width:768px){
-            .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:#fff;flex-direction:column;padding:1rem;border-bottom:1px solid var(--border);box-shadow:var(--shadow-lg);}
-            .nav-links.open{display:flex;}
-            .mobile-menu-btn{display:block;}
-            .section{padding:2.5rem 1rem;}
-            .hero h1{font-size:1.7rem;}
-            .theory-grid,.tasks-grid{grid-template-columns:1fr;}
-            .test-container{padding:1.5rem;}
-            .vr-room-container{flex-direction:column;}
+        /* Theory Detail Modal */
+        .detail-modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .detail-modal.active { display: flex; }
+        .detail-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 3rem; max-width: 800px; width: 92%; max-height: 85vh; overflow-y: auto; position: relative; box-shadow: var(--shadow-lg); }
+        .detail-close { position: absolute; top: 20px; right: 25px; font-size: 2.2rem; cursor: pointer; color: var(--text); transition: 0.2s; }
+        .detail-close:hover { color: var(--danger); transform: scale(1.1); }
+
+        @media(max-width:768px) {
+            .nav-links { display: none; position: absolute; top: 70px; left: 5%; width: 90%; background: #fff; flex-direction: column; padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+            .nav-links.open { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .section { padding: 3rem 1rem; }
+        }
+
+        /* Blackout animation for portal transitions */
+        #portalOverlay {
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-
-<nav class="navbar" id="navbar">
-    <a href="#" class="nav-logo">
-        <svg viewBox="0 0 40 40"><rect width="40" height="40" rx="12" fill="#4f46e5"/><path d="M12 14h16v2H12zm0 5h12v2H12zm0 5h14v2H12z" fill="#fff"/><circle cx="28" cy="28" r="7" fill="#06b6d4" stroke="#fff" stroke-width="2"/></svg>
-        VR Mektep
-    </a>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
-    <ul class="nav-links" id="navLinks">
-        <li><a href="#teoriya">📚 Теория</a></li>
-        <li><a href="#testter">📝 Тесттер</a></li>
-        <li><a href="#tapsyrmalar">🛠️ Практика</a></li>
-        <li><a href="#galereya">🖼️ Галерея</a></li>
-        <li><a href="#vr-room">🥽 VR Бөлме</a></li>
-        <li><a href="#resurstar">🔗 Ресурстар</a></li>
-    </ul>
-</nav>
-
-<section class="hero">
-    <div class="hero-content">
-        <span style="background:rgba(255,255,255,0.2);padding:0.4rem 1.2rem;border-radius:50px;font-size:0.85rem;">🚀 Мұғалімдерге арналған</span>
-        <h1>Виртуалды шындық мектеп тәжірибесінде</h1>
-        <p>VR технологиясын оқытудың толық құралы: теория, тесттер және 10 егжей-тегжейлі практикалық тапсырма.</p>
-        <a href="#teoriya" class="btn btn-primary">Оқуды бастау</a>
-        <a href="#tapsyrmalar" class="btn btn-outline" style="margin-left:10px;">Практикалық тапсырмалар</a>
-    </div>
-</section>
-
-<!-- Теория -->
-<section class="section" id="teoriya">
-    <div class="section-header"><h2>📚 Теориялық мәліметтер</h2><p>7 модуль – әрқайсысын ашып оқыңыз</p><div class="section-divider"></div></div>
-    <div class="theory-grid" id="theoryGrid"></div>
-</section>
-
-<!-- Тесттер -->
-<section class="section" id="testter" style="background:#fff;">
-    <div class="section-header"><h2>📝 Тест тапсырмалары</h2><p>Біліміңізді тексеріңіз</p><div class="section-divider"></div></div>
-    <div class="test-container" id="testContainer">
-        <div class="test-nav-tabs" id="testTabs"></div>
-        <div id="quizArea"></div>
-    </div>
-</section>
-
-<!-- ==================== ПРАКТИКАЛЫҚ ТАПСЫРМАЛАР (ТОЛЫҚТЫРЫЛҒАН) ==================== -->
-<section class="section" id="tapsyrmalar">
-    <div class="section-header">
-        <h2>🛠️ Практикалық тапсырмалар</h2>
-        <p>VR технологиясын сабақта қолдану бойынша 10 толық қадамдық тапсырма</p>
-        <div class="section-divider"></div>
-    </div>
-    <div class="tasks-grid" id="tasksGrid"></div>
-</section>
-
-<!-- Галерея -->
-<section class="section" id="galereya" style="background:#fff;">
-    <div class="section-header"><h2>🖼️ VR галереясы</h2><p>Мектептегі VR қолдану мысалдары – суреттерді жүктеңіз, жойыңыз</p><div class="section-divider"></div></div>
-    <div class="upload-zone" onclick="document.getElementById('imageUpload').click()">
-        <div style="font-size:3rem;">📤</div>
-        <p><strong>Жаңа VR сурет қосу үшін басыңыз</strong></p>
-        <input type="file" id="imageUpload" accept="image/*" multiple onchange="handleImageUpload(event)">
-    </div>
-    <div class="gallery-grid" id="galleryGrid">
-        <!-- Статикалық VR суреттер -->
-        <div class="gallery-item" id="gimg-0"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e1b4b"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient></defs><rect width="400" height="280" fill="url(#g1)"/><circle cx="200" cy="110" r="55" fill="none" stroke="#a5b4fc" stroke-width="4" opacity="0.7"/><ellipse cx="200" cy="115" rx="45" ry="55" fill="#312e81" stroke="#c7d2fe" stroke-width="2"/><rect x="155" y="95" width="90" height="45" rx="22" fill="#4f46e5" opacity="0.8"/><circle cx="178" cy="107" r="10" fill="#06b6d4"/><circle cx="222" cy="107" r="10" fill="#06b6d4"/><rect x="185" y="118" width="30" height="3" rx="2" fill="#e2e8f0"/><text x="200" y="210" text-anchor="middle" fill="#e0e7ff" font-size="14" font-weight="bold">Оқушы VR-да</text></svg></div><div class="gallery-caption">VR гарнитурасындағы оқушы <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-0')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-1"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e293b"/></linearGradient></defs><rect width="400" height="280" fill="url(#g2)"/><rect x="60" y="25" width="280" height="190" rx="16" fill="#1e293b" stroke="#334155" stroke-width="2"/><rect x="80" y="45" width="240" height="150" rx="8" fill="#0f172a"/><circle cx="200" cy="120" r="40" fill="none" stroke="#06b6d4" stroke-width="3" opacity="0.9"/><circle cx="200" cy="120" r="20" fill="#0d9488" opacity="0.5"/><rect x="185" y="105" width="30" height="30" rx="6" fill="#cffafe" opacity="0.7"/><text x="200" y="245" text-anchor="middle" fill="#cbd5e1" font-size="13">Виртуалды зертхана</text></svg></div><div class="gallery-caption">Химиялық эксперимент <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-1')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-2"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#16213e"/></linearGradient></defs><rect width="400" height="280" fill="url(#g3)"/><circle cx="140" cy="120" r="35" fill="#e0e7ff" opacity="0.15"/><circle cx="260" cy="120" r="35" fill="#cffafe" opacity="0.15"/><circle cx="200" cy="75" r="28" fill="#fef3c7" opacity="0.25"/><line x1="140" y1="120" x2="200" y2="75" stroke="#818cf8" stroke-width="2" opacity="0.7"/><line x1="260" y1="120" x2="200" y2="75" stroke="#06b6d4" stroke-width="2" opacity="0.7"/><line x1="140" y1="120" x2="260" y2="120" stroke="#a5b4fc" stroke-width="2" opacity="0.7"/><text x="200" y="235" text-anchor="middle" fill="#e2e8f0" font-size="14" font-weight="bold">3D молекула</text></svg></div><div class="gallery-caption">Молекула құрылымы <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-2')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-3"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1c1917"/><stop offset="100%" stop-color="#292524"/></linearGradient></defs><rect width="400" height="280" fill="url(#g4)"/><rect x="30" y="20" width="340" height="200" rx="12" fill="#292524" stroke="#78716c" stroke-width="2"/><rect x="50" y="40" width="140" height="90" rx="8" fill="#44403c"/><rect x="210" y="40" width="140" height="90" rx="8" fill="#44403c"/><rect x="50" y="145" width="300" height="55" rx="8" fill="#57534e"/><circle cx="120" cy="85" r="18" fill="#fbbf24" opacity="0.7"/><circle cx="280" cy="85" r="18" fill="#fbbf24" opacity="0.7"/><text x="200" y="245" text-anchor="middle" fill="#d6d3d1" font-size="13">Тарихи саяхат</text></svg></div><div class="gallery-caption">Ежелгі қала экскурсиясы <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-3')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-4"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0c0a3e"/><stop offset="100%" stop-color="#2e1065"/></linearGradient></defs><rect width="400" height="280" fill="url(#g5)"/><rect x="100" y="30" width="200" height="180" rx="50" fill="#1a1550" stroke="#7c3aed" stroke-width="3"/><circle cx="170" cy="110" r="22" fill="#2e1065"/><circle cx="230" cy="110" r="22" fill="#2e1065"/><rect x="150" y="135" width="100" height="30" rx="15" fill="#4c1d95"/><rect x="130" y="70" width="140" height="15" rx="7" fill="#7c3aed" opacity="0.5"/><text x="200" y="245" text-anchor="middle" fill="#c4b5fd" font-size="14">VR гарнитура құрылысы</text></svg></div><div class="gallery-caption">Құрылғы архитектурасы <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-4')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-5"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#022c22"/><stop offset="100%" stop-color="#064e3b"/></linearGradient></defs><rect width="400" height="280" fill="url(#g6)"/><rect x="40" y="30" width="320" height="190" rx="14" fill="#064e3b" stroke="#10b981" stroke-width="2"/><circle cx="120" cy="100" r="32" fill="#047857" opacity="0.6"/><circle cx="200" cy="80" r="28" fill="#059669" opacity="0.6"/><circle cx="280" cy="110" r="26" fill="#047857" opacity="0.6"/><rect x="100" y="150" width="200" height="40" rx="10" fill="#34d399" opacity="0.3"/><text x="200" y="245" text-anchor="middle" fill="#a7f3d0" font-size="14">Мұғалім VR сабағында</text></svg></div><div class="gallery-caption">Сабақ барысы <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-5')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-6"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e1b4b"/><stop offset="100%" stop-color="#312e81"/></linearGradient></defs><rect width="400" height="280" fill="url(#g7)"/><ellipse cx="200" cy="130" rx="90" ry="70" fill="#2e1065" opacity="0.4"/><circle cx="150" cy="100" r="40" fill="#4f46e5" opacity="0.5"/><circle cx="250" cy="100" r="40" fill="#06b6d4" opacity="0.5"/><text x="200" y="230" text-anchor="middle" fill="#e0e7ff" font-size="13">Толықтырылған шындық</text></svg></div><div class="gallery-caption">AR технологиясы <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-6')">🗑️</button></div></div>
-        <div class="gallery-item" id="gimg-7"><div class="gallery-img-wrap"><svg viewBox="0 0 400 280"><defs><linearGradient id="g8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e293b"/></linearGradient></defs><rect width="400" height="280" fill="url(#g8)"/><rect x="80" y="40" width="240" height="180" rx="20" fill="#1e293b" stroke="#818cf8" stroke-width="2"/><circle cx="160" cy="130" r="25" fill="#4f46e5" opacity="0.6"/><circle cx="240" cy="130" r="25" fill="#06b6d4" opacity="0.6"/><rect x="170" y="100" width="60" height="20" rx="10" fill="#c7d2fe" opacity="0.8"/><text x="200" y="245" text-anchor="middle" fill="#e2e8f0" font-size="13">Интерактивті тақта</text></svg></div><div class="gallery-caption">VR жабдықтары <button class="delete-img-btn" onclick="deleteGalleryItem('gimg-7')">🗑️</button></div></div>
-    </div>
-</section>
-
-<!-- VR Бөлме -->
-<section class="section" id="vr-room">
-    <div class="section-header"><h2>🥽 VR Бөлме жасау</h2><p>Бөлменің суреттерін жүктеп, 3D кеңістікте айналдыра қараңыз</p><div class="section-divider"></div></div>
-    <div class="vr-room-container">
-        <div class="vr-upload-panel">
-            <h3>📷 Суреттерді жүктеу</h3>
-            <div class="vr-input-group"><label>🧱 Алдыңғы қабырға (Front)</label><input type="file" accept="image/*" id="vrFront"></div>
-            <div class="vr-input-group"><label>🧱 Артқы қабырға (Back)</label><input type="file" accept="image/*" id="vrBack"></div>
-            <div class="vr-input-group"><label>🧱 Сол жақ (Left)</label><input type="file" accept="image/*" id="vrLeft"></div>
-            <div class="vr-input-group"><label>🧱 Оң жақ (Right)</label><input type="file" accept="image/*" id="vrRight"></div>
-            <div class="vr-input-group"><label>⬆️ Төбе (Up)</label><input type="file" accept="image/*" id="vrUp"></div>
-            <div class="vr-input-group"><label>⬇️ Еден (Down)</label><input type="file" accept="image/*" id="vrDown"></div>
-            <div class="vr-controls">
-                <button class="btn btn-sm btn-accent" id="startVRBtn">🚀 VR бөлмені көру</button>
-                <button class="btn btn-sm btn-danger" id="clearVRBtn">🗑️ Барлығын өшіру</button>
-            </div>
-            <p style="font-size:0.75rem;color:var(--text-light);margin-top:0.8rem;">Суреттер жүктелмеген жақтар қара түспен көрсетіледі. Тышқанмен айналдырып, 3D бөлмені зерттеңіз.</p>
+    <nav class="navbar mt-4">
+        <div class="nav-logo" onclick="navigateTo('home')">
+            <svg viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#4f46e5"/><path d="M12 18h16v2H12zm0 5h12v2H12zm0 5h14v2H12z" fill="#fff"/></svg> VR Mektep
         </div>
-        <div class="vr-preview-box" id="vrPreviewBox">
-            <div id="vrPlaceholder"><span style="font-size:3rem;">🥽</span><p>Суреттерді жүктеп, "VR бөлмені көру" түймесін басыңыз</p></div>
-        </div>
-    </div>
-</section>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a onclick="navigateTo('home')" class="active">🏠 Басты</a></li>
+            <li><a onclick="navigateTo('theory')">📚 Теория</a></li>
+            <li><a onclick="navigateTo('tests')">📝 Тесттер</a></li>
+            <li><a onclick="navigateTo('gallery')">🖼️ Галерея</a></li>
+            <li><a onclick="navigateTo('vrroom')">🥽 VR Бөлме</a></li>
+            <li><a onclick="navigateTo('customvr')">📸 Қос VR Тур</a></li>
+        </ul>
+    </nav>
 
-<!-- Ресурстар -->
-<section class="section" id="resurstar">
-    <div class="section-header"><h2>🔗 Пайдалы ресурстар</h2><div class="section-divider"></div></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem;max-width:900px;margin:0 auto;" id="resourcesGrid"></div>
-</section>
-
-<footer class="footer"><p>© 2026 <strong>VR Mektep</strong> — Мектеп тәжірибесіндегі VR технологиясын талдау платформасы</p></footer>
-
-<!-- Three.js -->
-<script type="importmap">
-    { "imports": { "three": "https://unpkg.com/three@0.126.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.126.0/examples/jsm/" } }
-</script>
-<script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    let vrScene, vrCamera, vrRenderer, vrControls, skyboxMesh = null, vrActive = false;
-    const vrPreviewBox = document.getElementById('vrPreviewBox');
-    const vrPlaceholder = document.getElementById('vrPlaceholder');
-    const vrInputs = { front: document.getElementById('vrFront'), back: document.getElementById('vrBack'), left: document.getElementById('vrLeft'), right: document.getElementById('vrRight'), up: document.getElementById('vrUp'), down: document.getElementById('vrDown') };
-    function loadImageFromFile(file) { return new Promise((resolve, reject) => { if (!file) return resolve(null); const reader = new FileReader(); reader.onload = e => resolve(e.target.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
-    function createSkyboxTexture(images) {
-        const loader = new THREE.TextureLoader();
-        const materials = [];
-        const sides = ['right', 'left', 'up', 'down', 'front', 'back'];
-        for (let side of sides) {
-            const img = images[side] || null;
-            if (img) { const texture = loader.load(img); texture.minFilter = THREE.LinearFilter; materials.push(new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide })); }
-            else materials.push(new THREE.MeshBasicMaterial({ color: 0x111111, side: THREE.BackSide }));
-        }
-        return new THREE.Mesh(new THREE.BoxGeometry(500, 500, 500), materials);
-    }
-    function initVRScene() {
-        if (vrRenderer) { vrRenderer.dispose(); vrPreviewBox.removeChild(vrRenderer.domElement); vrRenderer = null; }
-        vrScene = new THREE.Scene();
-        vrCamera = new THREE.PerspectiveCamera(75, vrPreviewBox.clientWidth / Math.max(1, vrPreviewBox.clientHeight), 1, 1000);
-        vrCamera.position.set(0, 0, 0.1);
-        vrRenderer = new THREE.WebGLRenderer({ antialias: true });
-        vrRenderer.setSize(vrPreviewBox.clientWidth, vrPreviewBox.clientHeight);
-        vrRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        vrPreviewBox.appendChild(vrRenderer.domElement);
-        vrControls = new OrbitControls(vrCamera, vrRenderer.domElement);
-        vrControls.enableDamping = true; vrControls.dampingFactor = 0.05; vrControls.rotateSpeed = 0.5; vrControls.enableZoom = false;
-        vrControls.target.set(0, 0, -1); vrControls.update();
-        vrPlaceholder.style.display = 'none';
-    }
-    async function startVRRoom() {
-        const promises = {}; for (let key in vrInputs) promises[key] = loadImageFromFile(vrInputs[key].files[0]);
-        const images = {}; for (let key in promises) images[key] = await promises[key];
-        if (!Object.values(images).some(img => img !== null)) { alert('Кем дегенде бір сурет жүктеңіз!'); return; }
-        if (!vrScene) initVRScene();
-        if (skyboxMesh) { vrScene.remove(skyboxMesh); skyboxMesh.geometry.dispose(); if (Array.isArray(skyboxMesh.material)) skyboxMesh.material.forEach(m => m.dispose()); }
-        skyboxMesh = createSkyboxTexture(images); vrScene.add(skyboxMesh); vrActive = true; animateVR();
-    }
-    function animateVR() { if (!vrActive) return; requestAnimationFrame(animateVR); if (vrControls) vrControls.update(); if (vrRenderer && vrScene && vrCamera) vrRenderer.render(vrScene, vrCamera); }
-    function stopVRRoom() {
-        vrActive = false;
-        if (skyboxMesh) { vrScene.remove(skyboxMesh); skyboxMesh.geometry.dispose(); if (Array.isArray(skyboxMesh.material)) skyboxMesh.material.forEach(m => m.dispose()); skyboxMesh = null; }
-        if (vrRenderer) { vrRenderer.dispose(); vrPreviewBox.removeChild(vrRenderer.domElement); vrRenderer = null; }
-        vrScene = null; vrCamera = null; vrControls = null; vrPlaceholder.style.display = 'flex';
-    }
-    function clearVRInputs() { for (let key in vrInputs) vrInputs[key].value = ''; stopVRRoom(); }
-    document.getElementById('startVRBtn').addEventListener('click', startVRRoom);
-    document.getElementById('clearVRBtn').addEventListener('click', clearVRInputs);
-    window.addEventListener('resize', () => { if (vrCamera && vrRenderer && vrPreviewBox) { vrCamera.aspect = vrPreviewBox.clientWidth / Math.max(1, vrPreviewBox.clientHeight); vrCamera.updateProjectionMatrix(); vrRenderer.setSize(vrPreviewBox.clientWidth, vrPreviewBox.clientHeight); } });
-</script>
-
-<script>
-    // Мобильді мәзір
-    document.getElementById('mobileMenuBtn').addEventListener('click', ()=>{ document.getElementById('navLinks').classList.toggle('open'); });
-    document.querySelectorAll('#navLinks a').forEach(link=>{ link.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open')); });
-    window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>20); });
-
-    // Теория деректері
-    const theoryData = [
-        {icon:'icon-blue',emoji:'🥽',title:'VR дегеніміз не?',desc:'Виртуалды шындық ұғымы, анықтамасы, принциптері.',detail:'<p><strong>VR</strong> — компьютерлік модельдеу арқылы жасалған жасанды орта.</p><ul><li>Толық иммерсивтілік</li><li>Интерактивтілік</li><li>3D визуализация</li></ul>'},
-        {icon:'icon-cyan',emoji:'📜',title:'VR тарихы',desc:'Sensorama-дан Oculus-қа дейін.',detail:'<ul><li>1962 – Sensorama</li><li>1968 – Дамокл семсері</li><li>1990 – Jaron Lanier термині</li><li>2016 – Oculus Rift</li></ul>'},
-        {icon:'icon-green',emoji:'🖥️',title:'VR түрлері',desc:'Толық, жартылай, иммерсивті емес.',detail:'<ul><li>Толық иммерсивті (HMD)</li><li>Жартылай (CAVE)</li><li>Иммерсивті емес (360° видео)</li><li>AR/MR</li></ul>'},
-        {icon:'icon-amber',emoji:'🏫',title:'Білім берудегі VR',desc:'Сабақтарда қолдану мүмкіндіктері.',detail:'<ul><li>Тарих – виртуалды экскурсия</li><li>Биология – ағза 3D</li><li>Физика – тәжірибелер</li></ul>'},
-        {icon:'icon-purple',emoji:'🔧',title:'VR құрылғылары',desc:'Мектепке қажетті жабдықтар.',detail:'<ul><li>Meta Quest 3</li><li>HTC Vive Pro</li><li>Pico 4</li><li>Google Cardboard</li></ul>'},
-        {icon:'icon-rose',emoji:'💻',title:'VR бағдарламалық қамтама',desc:'Білім беру платформалары.',detail:'<ul><li>Google Expeditions</li><li>Nearpod VR</li><li>CoSpaces Edu</li><li>Labster</li></ul>'},
-        {icon:'icon-teal',emoji:'📋',title:'Әдістемелік ұсыныстар',desc:'VR сабақта тиімді пайдалану.',detail:'<ul><li>Мақсатты анықтау</li><li>Уақыт шектеу (10-15 мин)</li><li>Рефлексия</li><li>Гигиена</li></ul>'}
-    ];
-    document.getElementById('theoryGrid').innerHTML = theoryData.map(t=>`<div class="theory-card" onclick="toggleCard(this)"><div class="icon-circle ${t.icon}">${t.emoji}</div><h3>${t.title}</h3><p>${t.desc}</p><span class="expand-hint">Толығырақ ▾</span><div class="theory-detail">${t.detail}</div></div>`).join('');
-    window.toggleCard = function(card){ card.classList.toggle('expanded'); const hint = card.querySelector('.expand-hint'); hint.textContent = card.classList.contains('expanded') ? 'Жасыру ▴' : 'Толығырақ ▾'; };
-
-    // Тесттер
-    const quizzes = [
-        {title:'Тест №1: VR негіздері', questions:[{q:'VR дегеніміз не?',opts:['Виртуалды шындық','Жасанды интеллект','Робототехника','Блокчейн'],ans:0},{q:'VR негізгі қасиеті?',opts:['Жылдамдық','Иммерсивтілік','Арзандық','Қарапайымдылық'],ans:1},{q:'Толық VR үшін не керек?',opts:['Монитор','VR гарнитура','Пернетақта','Принтер'],ans:1},{q:'VR терминін кім енгізді?',opts:['Билл Гейтс','Стив Джобс','Jaron Lanier','Илон Маск'],ans:2},{q:'Sensorama қашан?',opts:['1980','1962','2000','1995'],ans:1},{q:'VR қандай сезімдерге әсер етеді?',opts:['Тек көру','Көру, есту','Көру, есту, сипап сезу','Сипап сезу'],ans:2},{q:'AR деген не?',opts:['Виртуалды','Толықтырылған шындық','AI','Микроскоп'],ans:1},{q:'CAVE қандай VR?',opts:['Толық','Жартылай иммерсивті','Иммерсивті емес','AR'],ans:1},{q:'Интерактивтілік?',opts:['Тек көру','Нақты уақытта жауап','Баяу','Авто'],ans:1},{q:'Білімдегі VR артықшылығы?',opts:['Қымбат','Көрнекі етеді','Ойын','Интернет керек емес'],ans:1}]},
-        {title:'Тест №2: Білім берудегі VR', questions:[{q:'Тарихта VR?',opts:['Мәтін','Виртуалды экскурсия','Есеп','Сурет'],ans:1},{q:'Ұсынылатын уақыт?',opts:['1 сағ','10-15 мин','45 мин','Шектеусіз'],ans:1},{q:'Labster не?',opts:['Сурет','Виртуалды зертхана','Мәтін','Музыка'],ans:1},{q:'VR кейін не істеу?',opts:['Үйге','Рефлексия','Баға','Ұмыту'],ans:1},{q:'Google Expeditions?',opts:['Ойын','Экскурсия платформасы','Әлеуметтік желі','Музыка'],ans:1},{q:'Гарнитураны не істеу?',opts:['Сүртпеу','Дезинфекциялау','Сындыру','Жасыру'],ans:1},{q:'Биологияда VR?',opts:['Ештеңе','3D ағза','Дәптер','Фильм'],ans:1},{q:'Сабақ жоспары?',opts:['Тек VR','Кіріспе,VR,рефлексия','Рефлексия','Кіріспе'],ans:1},{q:'CoSpaces?',opts:['Ойын','Контент жасау','Музыка','Фильм'],ans:1},{q:'Тиімділікті бағалау?',opts:['Жоқ','Кері байланыс','Тест','Ұпай'],ans:1}]},
-        {title:'Тест №3: VR құрылғылары', questions:[{q:'Meta Quest 3?',opts:['Сымды','Автономды','Картон','Проекция'],ans:1},{q:'Ең арзан?',opts:['HTC Vive','Meta Quest Pro','Google Cardboard','Apple Vision Pro'],ans:2},{q:'HTC Vive Pro?',opts:['Ойын','Жоғары дәлдік','Арзан','Музыка'],ans:1},{q:'VR қолғаптар?',opts:['Жылыту','Тактильді кері байланыс','Сән','Қорғаныс'],ans:1},{q:'Pico 4?',opts:['Қымбат','Бюджеттік, білімге','Ойын','Сирек'],ans:1},{q:'Сыртқы сенсорлар?',opts:['Керек емес','Қозғалысты бақылау','Жылу','Дыбыс'],ans:1},{q:'Google Cardboard?',opts:['Компьютер','Смартфон','Теледидар','Радио'],ans:1},{q:'Линзалар не үшін?',opts:['Сән','3D эффект','Қорғаныс','Жарық'],ans:1},{q:'Мектепке ең қолайлы?',opts:['Apple Vision Pro','Meta Quest 3','Varjo','HoloLens'],ans:1},{q:'Таңдау критерийі?',opts:['Баға','Автономдылық,контент','Түс','Салмақ'],ans:1}]}
-    ];
-    let currentTest=0, userAnswers={}, quizSubmitted={};
-    function renderQuiz(idx){
-        currentTest=idx; const qz=quizzes[idx]; const sub=quizSubmitted[idx];
-        let html=`<h3 style="text-align:center;">${qz.title}</h3>`;
-        if(sub){
-            let score=0; qz.questions.forEach((q,i)=>{ if(userAnswers[idx]?.[i]===q.ans) score++; });
-            const pct=Math.round(score/qz.questions.length*100);
-            html+=`<div style="text-align:center;padding:2rem;"><div style="font-size:3rem;">${pct}%</div><p>${score}/${qz.questions.length}</p><button class="btn btn-sm btn-accent" onclick="retryQuiz(${idx})">Қайта тапсыру</button></div>`;
-        }else{
-            qz.questions.forEach((q,qi)=>{
-                html+=`<div class="quiz-question"><h4>${qi+1}. ${q.q}</h4>`;
-                q.opts.forEach((opt,oi)=>{ let cls='quiz-option'; if(userAnswers[idx]?.[qi]===oi) cls+=' selected'; html+=`<div class="${cls}" onclick="selectAnswer(${idx},${qi},${oi})">${String.fromCharCode(65+oi)}) ${opt}</div>`; });
-                html+=`</div>`;
-            });
-            html+=`<button class="btn btn-primary" onclick="submitQuiz(${idx})" style="width:100%;">📤 Аяқтау</button>`;
-        }
-        document.getElementById('quizArea').innerHTML=html;
-        document.querySelectorAll('#testTabs .test-tab').forEach(t=>t.classList.toggle('active',parseInt(t.dataset.test)===idx));
-    }
-    window.selectAnswer=function(ti,qi,oi){if(quizSubmitted[ti])return; if(!userAnswers[ti])userAnswers[ti]={}; userAnswers[ti][qi]=oi; renderQuiz(ti);};
-    window.submitQuiz=function(ti){const all=Object.keys(userAnswers[ti]||{}).length; if(all<quizzes[ti].questions.length){alert('Барлық сұраққа жауап беріңіз!');return;} quizSubmitted[ti]=true; renderQuiz(ti);};
-    window.retryQuiz=function(ti){quizSubmitted[ti]=false; userAnswers[ti]={}; renderQuiz(ti);};
-    document.getElementById('testTabs').innerHTML = quizzes.map((q,i)=>`<button class="test-tab ${i===0?'active':''}" data-test="${i}">${q.title}</button>`).join('');
-    document.getElementById('testTabs').addEventListener('click',e=>{if(e.target.classList.contains('test-tab')) renderQuiz(parseInt(e.target.dataset.test));});
-    renderQuiz(0);
-
-    // ============ ТОЛЫҚ ПРАКТИКАЛЫҚ ТАПСЫРМАЛАР ============
-    const tasks = [
-        {
-            title:'VR сабақ жоспарын құру',
-            desc:'Пәнді таңдап, VR-дың мақсатын анықтап, толық сабақ жоспарын әзірлеу.',
-            shortSteps:['Пәнді таңдау','VR мақсатын белгілеу','Қосымша табу','Құрылым құру','Бағалау'],
-            fullDetail:`<ol>
-                <li><strong>Пәнді және сыныпты таңдаңыз.</strong> VR қай пәнде тиімді болатынын ойластырыңыз (мысалы, тарих, биология, география).</li>
-                <li><strong>VR қолданудың нақты мақсатын жазыңыз.</strong> Мысалы: «Оқушылар Ежелгі Римді виртуалды аралап, сәулет өнерін сипаттай алады».</li>
-                <li><strong>Қажетті VR қосымшасын немесе платформасын табыңыз.</strong> Google Expeditions, Nearpod, CoSpaces немесе Labster ішінен таңдаңыз.</li>
-                <li><strong>Сабақтың құрылымын жоспарлаңыз:</strong> Кіріспе (5 мин), VR сессиясы (10-15 мин), талқылау/рефлексия (10 мин).</li>
-                <li><strong>Бағалау критерийлерін дайындаңыз.</strong> Оқушылардың VR тәжірибесінен алған білімін қалай тексересіз? (тест, эссе, топтық талқылау)</li>
-                <li><strong>Қауіпсіздік ережелерін ескеріңіз:</strong> гарнитураны дезинфекциялау, уақыт шектеуі, көз жаттығулары.</li>
-                <li><strong>Дайын жоспарды әріптестермен бөлісіп, кері байланыс алыңыз.</strong></li>
-            </ol>`
-        },
-        {
-            title:'Виртуалды экскурсия ұйымдастыру',
-            desc:'Google Expeditions немесе Nearpod арқылы сыныпты әлемнің кез келген нүктесіне саяхатқа апару.',
-            shortSteps:['Қосымшаны орнату','Тур таңдау','Гарнитура дайындау','Оқушыларға нұсқау','Талқылау'],
-            fullDetail:`<ol>
-                <li><strong>Google Expeditions немесе Nearpod қосымшасын планшетке/смартфонға орнатыңыз.</strong> Екеуі де тегін негізгі нұсқаларға ие.</li>
-                <li><strong>Сынып тақырыбына сәйкес тур таңдаңыз.</strong> Мысалы, «Ұлы Қытай қорғаны», «Марс беті», «Адам ағзасы».</li>
-                <li><strong>VR гарнитураларын дайындаңыз.</strong> Әр оқушыға гарнитура (Google Cardboard немесе Meta Quest) беріңіз.</li>
-                <li><strong>Оқушыларға нұсқаулық беріңіз:</strong> гарнитураны қалай кию, басқару элементтері, экскурсия барысында не істеу керек.</li>
-                <li><strong>Экскурсияны бастаңыз.</strong> Мұғалім ретінде бағыттаушы болыңыз, тоқтап сұрақтар қойыңыз.</li>
-                <li><strong>Экскурсиядан кейін талқылау өткізіңіз.</strong> Оқушылар көргендерін сипаттап, алған әсерлерімен бөліседі.</li>
-            </ol>`
-        },
-        {
-            title:'VR контент жасау (CoSpaces)',
-            desc:'CoSpaces Edu платформасында өзіңіздің виртуалды әлеміңізді немесе сабақ материалын жасаңыз.',
-            shortSteps:['Тіркелу','Жоба құру','3D нысандар','Интерактив','Оқушылармен бөлісу'],
-            fullDetail:`<ol>
-                <li><strong>CoSpaces Edu сайтына тіркеліңіз</strong> (тегін мұғалім аккаунты).</li>
-                <li><strong>Жаңа жоба жасаңыз</strong> және оған тақырып беріңіз (мысалы, «Менің мектебімнің 3D моделі»).</li>
-                <li><strong>3D нысандар кітапханасынан</strong> қажетті элементтерді (ғимараттар, адамдар, жануарлар) сахнаға қосыңыз.</li>
-                <li><strong>Интерактивтілік қосыңыз:</strong> нысандарға код (CoBlock) арқылы қозғалыс, дыбыс немесе ақпараттық кестелер орнатыңыз.</li>
-                <li><strong>Дайын жобаны алдын ала қараңыз</strong> және қателерді түзетіңіз.</li>
-                <li><strong>Оқушылармен бөлісіңіз:</strong> сынып кодын беріңіз немесе тікелей сілтеме жіберіңіз.</li>
-                <li><strong>Оқушылардың өздеріне де контент жасауды ұсыныңыз</strong> – шығармашылық қабілеттерін дамытады.</li>
-            </ol>`
-        },
-        {
-            title:'Қауіпсіздік нұсқаулығын әзірлеу',
-            desc:'Мектепте VR қолданудың гигиеналық және техникалық қауіпсіздік ережелерін құрастырыңыз.',
-            shortSteps:['Гигиена талаптары','Уақыт шектеу','Дезинфекция','Плакат дайындау','Ата-анаға хат'],
-            fullDetail:`<ol>
-                <li><strong>Гигиеналық талаптарды зерттеңіз:</strong> гарнитураны әр қолданудан кейін спиртті майлықпен сүрту, бетке тиетін бөліктерін тазалау.</li>
-                <li><strong>Уақыт шектеуін белгілеңіз:</strong> бір сессия 10-15 минуттан аспауы керек, күніне ең көбі 30 минут.</li>
-                <li><strong>Дезинфекциялау тәртібін жазыңыз:</strong> қандай ерітінділер қолдануға болады, гарнитураны қалай дұрыс тазалау керек.</li>
-                <li><strong>Көз жаттығулары мен үзіліс ережелерін қосыңыз.</strong></li>
-                <li><strong>Оқушыларға арналған түрлі-түсті плакат дайындаңыз</strong> (Canva көмегімен) – негізгі ережелер суреттермен безендірілсін.</li>
-                <li><strong>Ата-аналарға ақпараттық хат дайындаңыз</strong> – VR технологиясының пайдасы мен қауіпсіздік шаралары туралы.</li>
-            </ol>`
-        },
-        {
-            title:'VR көмегімен зертханалық жұмыс',
-            desc:'Labster платформасында виртуалды зертханалық жұмыс орындап, нәтижелерді талдаңыз.',
-            shortSteps:['Labster-ге кіру','Жұмыс таңдау','Эксперимент','Мәліметтерді талдау','Есеп беру'],
-            fullDetail:`<ol>
-                <li><strong>Labster.com сайтына кіріп, мұғалім ретінде тіркеліңіз.</strong> Тегін сынақ нұсқасы бар.</li>
-                <li><strong>Пәніңізге сәйкес зертханалық жұмысты таңдаңыз</strong> (биология, химия, физика).</li>
-                <li><strong>Виртуалды зертханаға кіріп, құралдармен танысыңыз.</strong> Барлық қадамдар экранда көрсетіледі.</li>
-                <li><strong>Экспериментті орындаңыз:</strong> нұсқауларды орындап, мәліметтерді жазып алыңыз.</li>
-                <li><strong>Алынған нәтижелерді талдаңыз</strong> – графиктер, кестелер құрыңыз.</li>
-                <li><strong>Қорытынды есеп дайындаңыз</strong> және оны сыныппен бөлісіңіз.</li>
-                <li><strong>Дәстүрлі зертханамен салыстырыңыз:</strong> қай әдіс тиімдірек, қандай артықшылықтар бар?</li>
-            </ol>`
-        },
-        {
-            title:'VR сабақтың тиімділігін бағалау',
-            desc:'VR сабақ өткізіп, оқушылардың үлгеріміне әсерін зерттеңіз.',
-            shortSteps:['Сабақ өткізу','Кері байланыс','Нәтиже салыстыру','Түзету','Есеп'],
-            fullDetail:`<ol>
-                <li><strong>VR қолданылған сабақты өткізіңіз.</strong> Алдын ала сабақ жоспарын дайындаңыз.</li>
-                <li><strong>Оқушылардан кері байланыс жинаңыз:</strong> сауалнама, ауызша сұрау, шағын эссе.</li>
-                <li><strong>Бақылау тобымен салыстырыңыз</strong> (егер мүмкін болса) – VR-сыз сабақ пен VR-мен сабақтың нәтижелерін салыстырыңыз.</li>
-                <li><strong>Алынған деректерді талдаңыз:</strong> тест ұпайлары, белсенділік, есте сақтау деңгейі.</li>
-                <li><strong>Әдістемеңізге түзетулер енгізіңіз.</strong></li>
-                <li><strong>Қорытынды есеп дайындаңыз</strong> – мектеп әкімшілігіне немесе әріптестерге ұсыну үшін.</li>
-            </ol>`
-        },
-        {
-            title:'VR арқылы тіл үйрету',
-            desc:'Виртуалды ортада шет тілінде сөйлеу дағдыларын дамыту.',
-            shortSteps:['VR тілдік қосымша','Сценарий құру','Рөлдік ойын','Айтылым бағалау'],
-            fullDetail:`<ol>
-                <li><strong>VR тілдік қосымшасын таңдаңыз</strong> (Mondly VR, ImmerseMe, vTime XR).</li>
-                <li><strong>Сабақтың сценарийін құрыңыз:</strong> мейрамханада тапсырыс беру, қонақүйге кіру, дәрігерге бару.</li>
-                <li><strong>Оқушыларды жұпқа бөліп, рөлдік ойын ұйымдастырыңыз.</strong> Бірі – клиент, бірі – қызметкер.</li>
-                <li><strong>VR ішінде диалог жүргізіңіз.</strong> Қосымша оқушының айтылымын түзетіп, бағалайды.</li>
-                <li><strong>Сабақтан кейін қателерді талқылаңыз</strong> және жаңа сөздерді бекітіңіз.</li>
-            </ol>`
-        },
-        {
-            title:'VR көмегімен математикалық модельдеу',
-            desc:'Геометриялық фигуралар мен графиктерді 3D кеңістікте зерттеу.',
-            shortSteps:['GeoGebra VR','3D фигуралар','Интерактив','Есептер шығару'],
-            fullDetail:`<ol>
-                <li><strong>GeoGebra 3D немесе Calcflow қосымшасын орнатыңыз.</strong></li>
-                <li><strong>Сабақ тақырыбына сәйкес 3D модель дайындаңыз</strong> (призма, пирамида, функция графигі).</li>
-                <li><strong>Оқушылар гарнитура арқылы фигураны айналдырып, қырларын, бұрыштарын зерттейді.</strong></li>
-                <li><strong>Интерактивті есептер құрастырыңыз:</strong> «Осы фигураның көлемін табыңыз», «Бұрышты өлшеңіз».</li>
-                <li><strong>Оқушылар жауаптарын VR ішінде белгілейді.</strong></li>
-            </ol>`
-        },
-        {
-            title:'Мектепішілік VR көрме ұйымдастыру',
-            desc:'Оқушылардың VR жобаларын көрмеге қойып, мектеп қауымдастығына таныстыру.',
-            shortSteps:['Жобалар жинау','Көрме орны','Гарнитуралар','Кері байланыс'],
-            fullDetail:`<ol>
-                <li><strong>Оқушылардың CoSpaces немесе басқа платформада жасаған VR жобаларын жинаңыз.</strong></li>
-                <li><strong>Көрме өткізетін орынды дайындаңыз</strong> (мәжіліс залы, кітапхана).</li>
-                <li><strong>Әр жобаға бір гарнитурадан қойыңыз.</strong></li>
-                <li><strong>Қонақтарға (ата-аналар, басқа сынып оқушылары) гарнитураны кигізіп, жобаларды көрсетіңіз.</strong></li>
-                <li><strong>Кері байланыс жинап, үздік жобаларды марапаттаңыз.</strong></li>
-            </ol>`
-        },
-        {
-            title:'VR оқыту нәтижелерін талдау және есеп беру',
-            desc:'VR технологиясының оқу үдерісіне әсері туралы жан-жақты аналитикалық есеп дайындау.',
-            shortSteps:['Дерек жинау','Талдау','Графиктер','Ұсыныстар','Презентация'],
-            fullDetail:`<ol>
-                <li><strong>Бірнеше VR сабақтан кейін оқушылардың үлгерімі, белсенділігі туралы деректер жинаңыз.</strong></li>
-                <li><strong>Excel немесе Google Sheets көмегімен деректерді өңдеңіз.</strong></li>
-                <li><strong>Графиктер мен диаграммалар құрыңыз</strong> (VR қолданғанға дейін және кейін).</li>
-                <li><strong>Артықшылықтар мен кемшіліктерді талдаңыз.</strong></li>
-                <li><strong>Мектеп әкімшілігіне ұсыныстар дайындаңыз</strong> (қандай құрылғы сатып алу, қандай бағдарламалар қолдану).</li>
-                <li><strong>Презентация жасап, педагогикалық кеңесте баяндаңыз.</strong></li>
-            </ol>`
-        }
-    ];
-
-    function renderTasks(){
-        const grid = document.getElementById('tasksGrid');
-        grid.innerHTML = tasks.map((t, i) => `
-            <div class="task-card" id="task${i}">
-                <div class="task-number">${i+1}</div>
-                <h3>${t.title}</h3>
-                <p class="task-desc">${t.desc}</p>
-                <ul class="task-steps-short">${t.shortSteps.map(s => `<li>${s}</li>`).join('')}</ul>
-                <div class="task-full-detail">${t.fullDetail}</div>
-                <div class="task-actions">
-                    <button class="btn btn-sm btn-accent task-detail-btn" onclick="toggleTaskDetail(this, 'task${i}')">📋 Толық нұсқау</button>
-                    <button class="btn btn-sm btn-success task-check-btn" onclick="markComplete('task${i}', this)">✅ Орындалды</button>
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+        <div class="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <svg class="vr-svg" viewBox="0 0 200 120"><path d="M20 60 Q20 30 60 30 L140 30 Q180 30 180 60 L180 80 Q180 90 170 90 L150 90 Q140 90 140 80 L140 70 Q140 60 130 60 L70 60 Q60 60 60 70 L60 80 Q60 90 50 90 L30 90 Q20 90 20 80 Z" fill="none" stroke="#4f46e5" stroke-width="6"/><circle cx="65" cy="60" r="12" fill="#06b6d4"/><circle cx="135" cy="60" r="12" fill="#06b6d4"/></svg>
+                <h1>VR технологиясын терең меңгеріңіз</h1>
+                <p>Мектеп тәжірибесіне арналған толық платформа. Академиялық теория, 15 сұрақтық тесттер, 360° VR турлар және екі түрлі бөлмені бір-бірімен байланыстыратын қос портал виртуалды турын жасау мүмкіндігі.</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button class="btn btn-primary" onclick="navigateTo('theory')">📚 Теорияны оқу</button>
+                    <button class="btn btn-glass" onclick="navigateTo('customvr')">📸 Қос VR Тур жасау</button>
                 </div>
             </div>
-        `).join('');
-    }
+        </div>
+    </div>
 
-    window.toggleTaskDetail = function(btn, taskId){
-        const card = document.getElementById(taskId);
-        card.classList.toggle('expanded');
-        btn.textContent = card.classList.contains('expanded') ? '📋 Жасыру' : '📋 Толық нұсқау';
-    };
+    <!-- THEORY PAGE -->
+    <div id="page-theory" class="page">
+        <section class="section">
+            <div class="section-header"><h2>📚 Тереңдетілген теориялық оқу модулі</h2><p>Мақаланы толық ашу және формулаларды көру үшін карточканы басыңыз</p><div class="section-divider"></div></div>
+            <div class="theory-grid" id="theoryGrid"></div>
+        </section>
+    </div>
+    <div class="detail-modal" id="theoryDetailModal">
+        <div class="detail-card" id="theoryDetailContent"></div>
+    </div>
 
-    window.markComplete = function(taskId, btn){
-        const card = document.getElementById(taskId);
-        const existingBadge = card.querySelector('.task-completed-badge');
-        if(existingBadge){
-            existingBadge.remove();
-            btn.textContent = '✅ Орындалды';
-            btn.style.background = 'var(--success)';
-            return;
+    <!-- TESTS PAGE -->
+    <div id="page-tests" class="page">
+        <section class="section">
+            <div class="section-header"><h2>📝 Тесттер (15 сұрақ)</h2><div class="section-divider"></div></div>
+            <div class="test-container">
+                <div class="test-tabs" id="testTabs"></div>
+                <div id="quizArea"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- GALLERY PAGE -->
+    <div id="page-gallery" class="page">
+        <section class="section">
+            <div class="section-header"><h2>🖼️ 360° VR Галерея</h2><p>Дайын панорамаларды басып, айналдыра қараңыз</p><div class="section-divider"></div></div>
+            <div class="pano-grid" id="panoGrid"></div>
+        </section>
+        <div class="modal" id="panoModal"><span class="modal-close" onclick="closeModal()">✕</span><div class="modal-content" id="panoViewer"></div></div>
+    </div>
+
+    <!-- VR ROOM PAGE (WITH IMMERSIVE VIEW BUTTONS) -->
+    <div id="page-vrroom" class="page">
+        <section class="section">
+            <div class="section-header"><h2>🥽 VR Бөлме жасау</h2><p>Өз виртуалды сыныбыңызды баптаңыз және жиһаздар орналастырыңыз</p><div class="section-divider"></div></div>
+            <div style="display:flex; flex-wrap:wrap; gap:2rem;">
+                <div style="flex:1; min-width:280px; background:var(--surface); backdrop-filter:blur(10px); border-radius:var(--radius); padding:2rem; border:1px solid var(--border);" id="vrUploadPanel"></div>
+                <!-- 3D Preview area with fullscreen trigger overlay -->
+                <div style="flex:2; min-width:340px; background:#000; border-radius:var(--radius); position:relative; min-height:450px;" id="vrPreviewContainer">
+                    <div class="w-full h-full" id="vrPreviewBox" style="min-height: 450px; border-radius: var(--radius); overflow: hidden;"></div>
+                    <!-- Absolute view control inside the canvas editor -->
+                    <button onclick="openVRRoomFullscreen()" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-3 rounded-full shadow-2xl transition-all transform hover:scale-105 flex items-center gap-2 z-10 text-sm border border-indigo-400">
+                        <span>🥽</span> Толық экранда көру
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- CUSTOM PHOTO TO VR PAGE (DOUBLE PANORAMA CONNECTED) -->
+    <div id="page-customvr" class="page">
+        <section class="section">
+            <div class="section-header">
+                <h2>📸 Қос панорамалы виртуалды тур</h2>
+                <p>Екі түрлі бөлменің панорамалық суреттерін жүктеңіз және оларды ортақ 3D портал арқылы біріктіріңіз!</p>
+                <div class="section-divider"></div>
+            </div>
+            
+            <div class="max-w-5xl mx-auto bg-white/70 backdrop-blur-md rounded-3xl p-6 border border-white/60 shadow-lg">
+                <!-- Dual Upload Drop Areas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Dropzone A -->
+                    <div class="flex flex-col">
+                        <label class="block mb-2 text-sm font-bold text-slate-700">1-ші бөлме панорамасы (Бастапқы нүкте):</label>
+                        <div class="flex flex-col items-center justify-center border-4 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-6 transition-all bg-white/50 cursor-pointer relative" id="dropAreaA">
+                            <span class="text-3xl mb-1">🚪</span>
+                            <p class="font-bold text-slate-700 text-center text-sm">Бөлме-1 суретін сүйреңіз</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Немесе басып таңдаңыз</p>
+                            <input type="file" id="customPanoInputA" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" accept="image/*">
+                        </div>
+                        <div id="statusA" class="text-xs text-indigo-600 mt-2 font-semibold text-center">💻 Дайын процедуралық "Коридор" қолданылуда</div>
+                    </div>
+
+                    <!-- Dropzone B -->
+                    <div class="flex flex-col">
+                        <label class="block mb-2 text-sm font-bold text-slate-700">2-ші бөлме панорамасы (Келесі нүкте):</label>
+                        <div class="flex flex-col items-center justify-center border-4 border-dashed border-slate-300 hover:border-emerald-500 rounded-2xl p-6 transition-all bg-white/50 cursor-pointer relative" id="dropAreaB">
+                            <span class="text-3xl mb-1">🔬</span>
+                            <p class="font-bold text-slate-700 text-center text-sm">Бөлме-2 суретін сүйреңіз</p>
+                            <p class="text-[10px] text-slate-400 mt-1">Немесе басып таңдаңыз</p>
+                            <input type="file" id="customPanoInputB" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" accept="image/*">
+                        </div>
+                        <div id="statusB" class="text-xs text-emerald-600 mt-2 font-semibold text-center">💻 Дайын процедуралық "Зертхана" қолданылуда</div>
+                    </div>
+                </div>
+
+                <!-- Active room controller toggles -->
+                <div class="flex justify-between items-center bg-slate-100 p-4 rounded-2xl mb-4 flex-wrap gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-bold text-slate-700">Ағымдағы бөлме:</span>
+                        <span id="activeRoomLabel" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full">1-ші бөлме (Коридор)</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="btnSwitchToA" class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-md transition-all">
+                            🚪 1-ші бөлмеге өту
+                        </button>
+                        <button id="btnSwitchToB" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-md transition-all">
+                            🔬 2-ші бөлмеге өту
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Connected Viewer Container -->
+                <div id="customPanoBox" class="relative rounded-2xl overflow-hidden bg-black" style="height: 480px;">
+                    <div id="customPanoViewer" class="w-full h-full"></div>
+                    
+                    <!-- Fading transition overlay -->
+                    <div id="portalOverlay" class="absolute inset-0 bg-black opacity-0 z-40 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <div class="absolute top-4 left-4 bg-black/60 text-white px-4 py-2 rounded-full text-xs font-semibold backdrop-blur flex items-center gap-2 z-10">
+                        <span class="animate-ping inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400 opacity-75"></span>
+                        <span>🚪 3D Порталды тінтуірмен тауып басыңыз немесе батырманы қолданыңыз</span>
+                    </div>
+                    <button id="resetCustomPanoBtn" class="absolute top-4 right-4 bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2 rounded-full text-xs shadow-md transition-all z-10">
+                        🗑️ Турды тазарту
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- VR Room Fullscreen View Modal -->
+    <div class="modal" id="vrRoomFullscreenModal">
+        <span class="modal-close" onclick="closeVRRoomFullscreen()">✕</span>
+        <div class="absolute bottom-6 left-6 z-10 bg-black/80 backdrop-blur text-white p-4 rounded-2xl max-w-sm border border-slate-700 pointer-events-none">
+            <h4 class="font-bold mb-1 text-indigo-400">🥽 Тәжірибелік сыныпты шолу</h4>
+            <p class="text-xs text-slate-300">Тінтуір немесе сенсорлық экран арқылы сынып бөлмесін айнала шолыңыз. Басқару үшін пернетақта немесе экран бұрыштарын қолданыңыз.</p>
+        </div>
+        <div class="w-full h-full" id="vrRoomFullscreenContainer"></div>
+    </div>
+
+    <!-- Footer of the page -->
+    <footer style="text-align:center; padding:2rem; color:var(--text-light); margin-top: 3rem;">© 2026 VR Mektep. Барлық құқықтар қорғалған.</footer>
+
+    <!-- WebGL library configurations -->
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.126.0/build/three.module.js';
+        import { OrbitControls } from 'https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js';
+
+        // ========== NAVIGATION & STATE MANAGEMENT ==========
+        let currentPanoScene, currentPanoCamera, currentPanoRenderer, currentPanoControls;
+        let vrScene, vrCamera, vrRenderer, vrControls;
+        
+        let customPanoScene, customPanoCamera, customPanoRenderer, customPanoControls;
+        let activeRoom = 'A'; // 'A' or 'B'
+        let panoATexture = null;
+        let panoBTexture = null;
+        let portalMesh = null; // The raycastable 3D portal
+        let raycaster = new THREE.Raycaster();
+        let mouse = new THREE.Vector2();
+
+        let vrObjects = []; // Classroom 3D models storage
+        let isVRFullscreen = false;
+
+        // Dynamic page navigator
+        window.navigateTo = (page) => {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            
+            const titles = { home: 'Басты', theory: 'Теория', tests: 'Тесттер', gallery: 'Галерея', vrroom: 'VR Бөлме', customvr: 'Қос VR Тур' };
+            document.querySelectorAll('.nav-links a').forEach(a => { 
+                if (a.textContent.includes(titles[page])) a.classList.add('active'); 
+            });
+            
+            if (page === 'tests') {
+                renderTestTabs();
+                window.renderQuiz(window._currentTest || 0);
+            }
+            if (page === 'vrroom') {
+                setTimeout(initVRRoom, 100);
+            }
+            if (page === 'gallery') {
+                initGalleryList();
+            }
+            if (page === 'customvr') {
+                setTimeout(initDoublePanoSystem, 100);
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('navLinks').classList.remove('open');
+        };
+
+        // Mobile responsive menu toggle listener
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+            });
         }
-        const badge = document.createElement('span');
-        badge.className = 'task-completed-badge';
-        badge.textContent = '✓ Орындалды!';
-        card.querySelector('h3').appendChild(badge);
-        btn.textContent = '🔄 Қайтару';
-        btn.style.background = 'var(--warning)';
-    };
 
-    renderTasks();
+        // ========== THEORY COMPONENT (EXPANDED WITH LATEX AND DETAILED SCIENTIFIC TEXTS) ==========
+        const theoryModules = [
+            {
+                title: '1. VR физикасы мен оптикасы',
+                desc: 'Бинокулярлы көру, линза оптикасы және иммерсивтілік физикасы.',
+                img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">Оптикалық иммерсивтіліктің физикалық негіздері</h3>
+                    <p class="mb-3">Виртуалды шындық гарнитуралары адамның көру жүйесін алдау үшін <b>стереоскопиялық (бинокулярлы) көру</b> заңдылықтарын қолданады. Сол және оң көзге бөлек, екі түрлі бұрыштан түсірілген кескінді беру арқылы мида кеңістіктік тереңдік ($depth perception$) сезімі қалыптасады.</p>
+                    
+                    <h4 class="font-semibold text-lg text-slate-800 mt-4 mb-2">Көру аймағы (Field of View - FOV)</h4>
+                    <p class="mb-3">Адам көзінің табиғи көру аймағы шамамен $FOV \approx 180^\circ - 200^\circ$ құрайды. VR құрылғыларында толыққанды ену әсерін беру үшін кем дегенде $FOV \ge 110^\circ$ қажет. Бұған арнайы дөңес (Френель немесе Pancake) линзаларын қолдану арқылы қол жеткізіледі.</p>
+                    
+                    <h4 class="font-semibold text-lg text-slate-800 mt-4 mb-2">Кадр жиілігі мен кідіріс (Latency)</h4>
+                    <p class="mb-3">Кибер-ауруды (бас айналуды) тудырмау үшін жүйенің жауап беру уақыты (кідіріс) келесі теңдеуді қанағаттандыруы тиіс:</p>
+                    <div class="bg-slate-100 p-3 rounded-xl my-3 text-center text-indigo-700 font-mono text-lg">
+                        $$t_{\text{latency}} < 20 \text{ ms}$$
+                    </div>
+                    <p class="mb-3">Ал дисплейдің кадр жиілігі кем дегенде $90\text{ Hz}$ немесе одан жоғары болуы шарт. Бұл визуалды ақпарат пен ішкі құлақтағы вестибулярлық аппараттан келетін сигналдардың үйлесімділігін сақтау үшін қажет.</p>
+                    <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Optics+Physics'">
+                `
+            },
+            {
+                title: '2. VR эволюциясы мен тарихы',
+                desc: 'Мортон Хейлигтің сенсорамасынан Apple Vision Pro-ға дейінгі жол.',
+                img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">Виртуалды шындықтың даму хронологиясы</h3>
+                    <p class="mb-3">Виртуалды шындықтың қалыптасу жолын бірнеше ірі технологиялық кезеңдерге бөліп қарастыруға болады:</p>
+                    
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li><b>1962 жыл: Мортон Хейлигтің Sensorama-сы.</b> Алғашқы мультисенсорлық механикалық симулятор. Ол стерео дыбысты, 3D кескінді, желдің соғуын және иісті шығару арқылы виртуалды мотоцикл айдауды сипаттады.</li>
+                        <li><b>1968 жыл: "Дамокл семсері" (The Sword of Damocles).</b> Гарвард университетінде Айвен Сазерленд жасап шығарған тұңғыш басқа киетін компьютерлік графикалық дисплей (HMD). Құрылғының ауырлығы сонша, ол төбеге ілініп тұратын.</li>
+                        <li><b>1980-жылдар: VPL Research.</b> Джарон Ланье бірінші рет "Virtual Reality" терминін енгізіп, коммерциялық мақсаттағы EyePhone гарнитурасы мен DataGlove қолғаптарын сатылымға шығарды.</li>
+                        <li><b>2012 жыл: Oculus революциясы.</b> Палмер Лаки жасаған Oculus Rift краудфандингтік Kickstarter платформасында миллиондаған доллар жинап, заманауи автономды VR гарнитураларының дәуірін ашты.</li>
+                    </ul>
+                    <p class="mb-3">Бүгінгі таңда Apple Vision Pro мен Meta Quest 3 құрылғылары кеңістіктік есептеулер мен аралас шындықтың жаңа деңгейін көрсетіп отыр.</p>
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=History+of+VR'">
+                `
+            },
+            {
+                title: '3. VR / AR / MR жіктелуі',
+                desc: 'Мильграмның аралас шындық континуумы мен классификациялары.',
+                img: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">Кеңейтілген шындық технологияларының жіктелуі</h3>
+                    <p class="mb-3"><b>Мильграм-Кишино континуумына</b> сәйкес, шынайы әлем мен толық виртуалды орта арасындағы барлық технологиялық деңгейлер <b>Кеңейтілген шындық (Extended Reality - XR)</b> ұғымына біріктіріледі. Мұны математикалық жиынтық түрінде сипаттауға болады:</p>
+                    <div class="bg-slate-100 p-3 rounded-xl my-3 text-center text-indigo-700 font-mono text-lg">
+                        $$XR = VR \cup AR \cup MR$$
+                    </div>
+                    
+                    <h4 class="font-semibold text-lg text-slate-800 mt-4 mb-2">Негізгі категориялар:</h4>
+                    <ol class="list-decimal pl-5 space-y-2 mb-4">
+                        <li><b>Virtual Reality (VR):</b> Қолданушы физикалық әлемнен оқшауланып, 100% компьютерлік 3D ортаға енеді.</li>
+                        <li><b>Augmented Reality (AR):</b> Физикалық нақты әлемнің үстіне цифрлық ақпаратты (мәтін, 3D нысан) бастырып көрсету (мысалы, Google Glasses).</li>
+                        <li><b>Mixed Reality (MR):</b> Цифрлық және физикалық нысандар нақты уақытта бір-бірімен өзара әрекеттесе алады. Виртуалды доп физикалық үстелдің үстінен секіріп кете алады.</li>
+                    </ol>
+                    <img src="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Virtual+Continuum'">
+                `
+            },
+            {
+                title: '4. Мектеп пәндерінде қолдану',
+                desc: 'Биология, химия және физиканы виртуалды зертханаларда оқыту әдістері.',
+                img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">Жаратылыстану бағытындағы сабақтарды VR-мен жабдықтау</h3>
+                    <p class="mb-3">Дәстүрлі оқулықтардан айырмашылығы, VR оқушыға микро және макро дүниелерді тікелей бақылауға мүмкіндік береді:</p>
+                    
+                    <ul class="list-disc pl-5 space-y-3 mb-4">
+                        <li><b>Биология:</b> Жасуша ядросының ішіне кіріп, ДНҚ-ның репликациялану және транскрипциялану процестерін молекулалық деңгейде бақылау. Бұл дерексіз ұғымдарды көрнекі етуге көмектеседі.</li>
+                        <li><b>Химия:</b> Қауіпті немесе жарылғыш реакцияларды (мысалы, сілтілі металдардың сумен әрекеттесуін) қауіпсіз жағдайда бақылап, химиялық байланыстардың түзілуін 3D форматында модельдеу.</li>
+                        <li><b>Физика:</b> Тілсіз электромагниттік өрістердің күш сызықтарын көру немесе ғарыштағы гравитациялық тартылысты модельдеп, планеталардың қозғалыс траекториясын баптау.</li>
+                    </ul>
+                    <p class="mb-3">Халықаралық PISA зерттеулеріне сәйкес, VR негізінде білім алған оқушылардың практикалық эксперименттерді игеру деңгейі $27\%$-ға жоғары екені дәлелденген.</p>
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Education+Pedagogy'">
+                `
+            },
+            {
+                title: '5. Құрылғылардың сипаттамасы',
+                desc: 'Дисплей ажыратымдылығы, PPD есептеу және бақылау жүйелері.',
+                img: 'https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">VR құрылғыларының негізгі инженерлік сипаттамалары</h3>
+                    <p class="mb-3">Гарнитура таңдаған кезде оның техникалық көрсеткіштерін түсіну өте маңызды. Олардың ішінде ең бастысы — дисплейдің шынайылығын көрсететін Пиксель Бұрышы ($Pixels \ Per \ Degree - PPD$):</p>
+                    <div class="bg-slate-100 p-3 rounded-xl my-3 text-center text-indigo-700 font-mono text-lg">
+                        $$PPD = \frac{N_{\text{pixels}}}{FOV_{\text{deg}}}$$
+                    </div>
+                    <p class="mb-3">Мұндағы $N_{\text{pixels}}$ — дисплейдің көлденең бағыттағы пиксель саны, ал $FOV_{\text{deg}}$ — градустағы көру аймағы. $PPD$ көрсеткіші $60$-тан асқан кезде адамның көзі виртуалды экранның пиксельдерін бөлек ажырата алмайды (Ретина эффектісі).</p>
+                    
+                    <h4 class="font-semibold text-lg text-slate-800 mt-4 mb-2">Қозғалысты бақылау (Degrees of Freedom - DoF):</h4>
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li><b>3 DoF:</b> Тек бастың бұрылуын бақылау (айналу қозғалыстары). Қарапайым телефонға арналған көзілдіріктер мен видео-панорамаларға жеткілікті.</li>
+                        <li><b>6 DoF:</b> Бастың бұрылуымен қатар, дененің 3D кеңістіктегі алға-артқа, солға-оңға және жоғары-төмен қозғалыстарын толық бақылау. Кәсіби білім беруге тек осы жүйе жарамды.</li>
+                    </ul>
+                    <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=VR+Engineering'">
+                `
+            },
+            {
+                title: '6. Бағдарламалық платформалар',
+                desc: 'CoSpaces, Labster және Unity білім беру құралдары.',
+                img: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">Оқу мазмұнын әзірлеу құралдары</h3>
+                    <p class="mb-3">Мектептерде дайын бағдарламаларды пайдаланып қана қоймай, оқушыларға өздерінің виртуалды әлемдерін бағдарламалауды үйрету маңызды:</p>
+                    
+                    <ul class="list-disc pl-5 space-y-3 mb-4">
+                        <li><b>CoSpaces Edu:</b> Блоктық бағдарламалау тілі (CoBlocks) немесе JavaScript арқылы оқушыларға 3D сценарийлер, тарихи диорамалар және интерактивті физикалық ойындар құруға мүмкіндік беретін бұлтты платформа.</li>
+                        <li><b>Labster:</b> Жоғары мектеп және университет деңгейіндегі виртуалды зертханалар жинағы. Ол заманауи ғылыми зерттеу орталықтарының құрал-жабдықтарымен виртуалды жұмыс істеу дағдыларын қалыптастырады.</li>
+                        <li><b>Unity және Unreal Engine:</b> Кәсіби 3D ойындар мен VR қосымшаларын дамытуға арналған негізгі қозғалтқыштар (SDK). Оқушыларды IT мен STEM бағытына терең бағыттау үшін қолданылады.</li>
+                    </ul>
+                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Software+Coding'">
+                `
+            },
+            {
+                title: '7. VR сабақты ұйымдастыру әдісі',
+                desc: 'Сабақтың үш кезеңді педагогикалық құрылымы.',
+                img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">VR технологиясын сабаққа тиімді кіріктіру әдістемесі</h3>
+                    <p class="mb-3">VR көзілдірігі сабақтың өзі емес, ол тек дидактикалық құрал болуы керек. Сабақтың ең тиімді құрылымы келесі үш кезеңнен тұрады:</p>
+                    
+                    <ol class="list-decimal pl-5 space-y-3 mb-4">
+                        <li><b>VR алдындағы дайындық (10 минут):</b> Мұғалім тақырыптың теориялық негізін түсіндіреді, қауіпсіздік ережелерін ескертеді және виртуалды әлемде шешілуі тиіс нақты сұрақтар немесе тапсырмаларды береді.</li>
+                        <li><b>Белсенді VR сессиясы (12-15 минут):</b> Оқушылар гарнитураны киіп, дербес немесе топпен зерттеу жұмысын жүргізеді. Мұғалім экраннан процесті бақылап, бағыт беріп отырады.</li>
+                        <li><b>VR-дан кейінгі рефлексия (15-20 минут):</b> Көзілдіріктерді шешкеннен кейін, оқушылар зерттеу нәтижелерін талқылайды, дәптерлеріне жазбалар толтырады немесе осы платформадағы сияқты тесттерден өтеді.</li>
+                    </ol>
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Lesson+Methodology'">
+                `
+            },
+            {
+                title: '8. Физиология және гигиена',
+                desc: 'Вестибулярлық аппарат, жас шектеулері және дезинфекциялау талаптары.',
+                img: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600&h=300&fit=crop',
+                full: `
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-700">Физиологиялық қауіпсіздік пен санитарлық нормалар</h3>
+                    <p class="mb-3">Оқушылардың денсаулығын қорғау — бірінші кезектегі міндет. VR пайдалану кезінде мына гигиеналық ережелерді қатаң сақтау қажет:</p>
+                    
+                    <h4 class="font-semibold text-lg text-slate-800 mt-4 mb-2">Көз аралық қашықтықты (IPD) реттеу:</h4>
+                    <p class="mb-3">Линзаларды әр оқушының қарашық аралығына сәйкес қолмен баптап орнату керек. Көптеген адамдар үшін бұл көрсеткіш келесідей болады:</p>
+                    <div class="bg-slate-100 p-3 rounded-xl my-3 text-center text-indigo-700 font-mono text-lg">
+                        $$IPD \in [58\text{ mm}, 72\text{ mm}]$$
+                    </div>
+                    
+                    <h4 class="font-semibold text-lg text-slate-800 mt-4 mb-2">Негізгі ережелер:</h4>
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li><b>Жас шектеуі:</b> Мектептерде 12 жастан асқан балаларға ғана VR қолдануға рұқсат етіледі, себебі одан кіші жастағы балалардың көз бұлшықеттері мен вестибулярлық аппараты әлі толық дамымаған.</li>
+                        <li><b>Санитарлық дезинфекция:</b> Гарнитураны әр қолданғаннан кейін арнайы спиртсіз гигиеналық дымқыл сулықтармен бетпен жанасатын силиконды/былғары төсеніштерін мұқият сүрту қажет.</li>
+                        <li><b>Вестибулярлық жүктеме:</b> Оқушыларда бас айналу белгілері байқалса, сессияны дереу тоқтатып, баланы отырғызып, таза ауа беру қажет.</li>
+                    </ul>
+                    <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=700&h=350&fit=crop" class="w-full rounded-2xl mt-4 border shadow-sm" onerror="this.src='https://placehold.co/600x300?text=Safety+Hygiene'">
+                `
+            }
+        ];
 
-    // Галерея
-    window.deleteGalleryItem = function(id){ const el = document.getElementById(id); if(el) el.remove(); };
-    window.handleImageUpload = function(event){
-        const files = event.target.files;
-        const grid = document.getElementById('galleryGrid');
-        for(let file of files){
-            if(!file.type.match(/^image\//)) continue;
-            if(file.size > 5*1024*1024){ alert(`"${file.name}" тым үлкен`); continue; }
+        document.getElementById('theoryGrid').innerHTML = theoryModules.map(m => `
+            <div class="theory-card" onclick="openTheoryDetail('${m.title}')">
+                <img class="theory-img" src="${m.img}" alt="${m.title}" onerror="this.src='https://placehold.co/400x200?text=VR'">
+                <h3>${m.title}</h3>
+                <p>${m.desc}</p>
+                <button class="text-xs text-indigo-600 font-bold hover:underline text-left mt-2">Толығырақ оқу →</button>
+            </div>`).join('');
+
+        window.openTheoryDetail = (title) => {
+            const module = theoryModules.find(m => m.title === title);
+            if (module) {
+                document.getElementById('theoryDetailContent').innerHTML = `<span class="detail-close" onclick="closeTheoryDetail()">✕</span>${module.full}`;
+                document.getElementById('theoryDetailModal').classList.add('active');
+                // Trigger MathJax typeset to render the newly inserted LaTeX formulas
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            }
+        };
+        window.closeTheoryDetail = () => document.getElementById('theoryDetailModal').classList.remove('active');
+
+        // ========== TESTS SECTION (3 TESTS WITH 15 QUESTIONS EACH) ==========
+        const quizzes = [
+            {
+                title: 'Тест №1: VR негіздері', questions: [
+                    { q: 'VR дегеніміз не?', opts: ['Виртуалды шындық', 'Жасанды интеллект', 'Робототехника', 'Блокчейн'], ans: 0 },
+                    { q: 'VR негізгі қасиеті?', opts: ['Жылдамдық', 'Иммерсивтілік', 'Арзандық', 'Қарапайымдылық'], ans: 1 },
+                    { q: 'Толық VR үшін не керек?', opts: ['Монитор', 'VR гарнитура', 'Пернетақта', 'Принтер'], ans: 1 },
+                    { q: 'VR терминін кім енгізді?', opts: ['Билл Гейтс', 'Стив Джобс', 'Jaron Lanier', 'Илон Маск'], ans: 2 },
+                    { q: 'Sensorama қашан жасалды?', opts: ['1980', '1962', '2000', '1995'], ans: 1 },
+                    { q: 'VR қандай сезімдерге әсер етеді?', opts: ['Тек көру', 'Көру, есту', 'Көру, есту, siпаттау', 'Сипаттау сенсорлары'], ans: 2 },
+                    { q: 'AR деген не?', opts: ['Виртуалды шындық', 'Толықтырылған шындық', 'AI', 'Микроскоп'], ans: 1 },
+                    { q: 'CAVE қандай VR түріне жатады?', opts: ['Толық', 'Жартылай иммерсивті', 'Иммерсивті емес', 'AR'], ans: 1 },
+                    { q: 'VR-дағы интерактивтілік деген не?', opts: ['Тек көру', 'Нақты уақытта жауап ейді', 'Баяу жауап', 'Автоматты ойнату'], ans: 1 },
+                    { q: 'Білім беруде VR артықшылығы?', opts: ['Қымбаттығы', 'Көрнекілігі', 'Ойын-сауық', 'Интернет қажет емес'], ans: 1 },
+                    { q: 'VR құрылғысының негізгі бөлігі?', opts: ['Пернетақта', 'Гарнитура', 'Тінтуір', 'Монитор'], ans: 1 },
+                    { q: 'VR технологиясы қай салада қолданылмайды?', opts: ['Медицина', 'Білім', 'Тамақ өнеркәсібі', 'Ойын'], ans: 2 },
+                    { q: 'Google Cardboard деген не?', opts: ['Ойын', 'Арзан VR шешімі', 'Телефон', 'Компьютер'], ans: 1 },
+                    { q: 'VR-да 3D визуализация нені білдіреді?', opts: ['2D сурет', 'Кеңістіктік қабылдау', 'Мәтіндік ақпарат', 'Дыбыс'], ans: 1 },
+                    { q: 'VR сабақта ұсынылатын уақыт?', opts: ['1 сағат', '10-15 минут', '45 минут', '30 минут'], ans: 1 }
+                ]
+            },
+            {
+                title: 'Тест №2: Білім берудегі VR', questions: [
+                    { q: 'Тарих сабағында VR қалай қолданылады?', opts: ['Мәтін оқу', 'Виртуалды экскурсия', 'Есеп шығару', 'Сурет салу'], ans: 1 },
+                    { q: 'Google Expeditions не үшін арналған?', opts: ['Ойын', 'Виртуалды экскурсиялар', 'Әлеуметтік желі', 'Музыка'], ans: 1 },
+                    { q: 'Labster платформасы немен айналысады?', opts: ['Сурет салу', 'Виртуалды зертхана', 'Мәтін жазу', 'Фильм көру'], ans: 1 },
+                    { q: 'VR сессиясынан кейін не істеу керек?', opts: ['Үйге жіберу', 'Рефлексия жасау', 'Баға қою', 'Ұмыту'], ans: 1 },
+                    { q: 'CoSpaces Edu не үшін қолданылады?', opts: ['Тек ойын', 'VR контент жасау', 'Музыка тыңдау', 'Фильм көру'], ans: 1 },
+                    { q: 'VR сабақ жоспарында не болуы керек?', opts: ['Тек VR', 'Кіріспе, VR, рефлексия', 'Тек рефлексия', 'Тек кіріспе'], ans: 1 },
+                    { q: 'Биологияда VR қандай мүмкіндік береді?', opts: ['Ештеңе', 'Адам ағзасын 3D зерттеу', 'Дәптерге жазу', 'Сурет салу'], ans: 1 },
+                    { q: 'VR сабақта уақыт шектеуі неге байланысты?', opts: ['Мұғалімнің қалауы', 'Көз шаршауының алдын алу', 'Оқушылардың өтініші', 'Құрылғы бағасы'], ans: 1 },
+                    { q: 'Nearpod VR дегеніміз не?', opts: ['Ойын', 'Интерактивті сабақтар платформасы', 'Әлеуметтік желі', 'Музыка қосымшасы'], ans: 1 },
+                    { q: 'VR гарнитурасын қолданғаннан кейін не істеу қажет?', opts: ['Сүртудің қажеті жоқ', 'Дезинфекциялау', 'Сындыру', 'Жасыру'], ans: 1 },
+                    { q: 'VR сабақтың тиімділігін қалай бағалаймыз?', opts: ['Бағаламаймыз', 'Кері байланыс жинау', 'Тек тест', 'Ұпай қою'], ans: 1 },
+                    { q: 'Физика сабағында VR не үшін пайдалы?', opts: ['Тек теория', 'Қауіпсіз тәжірибелер', 'Сурет салу', 'Мәтін оқу'], ans: 1 },
+                    { q: 'VR арқылы тіл үйренуге бола ма?', opts: ['Жоқ', 'Иә, иммерсивті ортада', 'Тек кітаппен', 'Тек мұғаліммен'], ans: 1 },
+                    { q: 'VR сабақта оқушылардың рөлі қандай?', opts: ['Пассивті тыңдаушы', 'Белсенді қатысушы', 'Тек көрермен', 'Ештеңе істемейді'], ans: 1 },
+                    { q: 'VR білім берудегі басты кемшілік?', opts: ['Арзандығы', 'Құрылғылардың қымбаттығы', 'Қызықтылығы', 'Жылдамдығы'], ans: 1 }
+                ]
+            },
+            {
+                title: 'Тест №3: VR құрылғылары', questions: [
+                    { q: 'Meta Quest 3 қандай VR түріне жатады?', opts: ['Сымды', 'Автономды', 'Картон', 'Проекциялық'], ans: 1 },
+                    { q: 'Ең арзан VR шешімі қандай?', opts: ['HTC Vive', 'Meta Quest Pro', 'Google Cardboard', 'Apple Vision Pro'], ans: 2 },
+                    { q: 'HTC Vive Pro не үшін қолданылады?', opts: ['Тек ойын', 'Жоғары дәлдікті қолдану', 'Арзан шешім', 'Музыка'], ans: 1 },
+                    { q: 'VR қолғаптар не үшін керек?', opts: ['Жылыту', 'Тактильді кері байланыс', 'Сән', 'Қорғаныс'], ans: 1 },
+                    { q: 'Pico 4 гарнитурасының ерекшелігі?', opts: ['Өте қымбат', 'Бюджеттік, білімге қолайлы', 'Тек ойынға', 'Сирек кездеседі'], ans: 1 },
+                    { q: 'Сыртқы сенсорлар не үшін қажет?', opts: ['Қажет емес', 'Қозғалысты дәл бақылау', 'Жылу', 'Дыбыс'], ans: 1 },
+                    { q: 'Google Cardboard қалай жұмыс істейді?', opts: ['Компьютермен', 'Смартфонға негізделген', 'Теледидармен', 'Радиомен'], ans: 1 },
+                    { q: 'VR гарнитурасындағы линзалар не үшін?', opts: ['Сән', '3D эффект және фокус', 'Қорғаныс', 'Жарық'], ans: 1 },
+                    { q: 'Мектепке ең қолайлы VR гарнитура?', opts: ['Apple Vision Pro', 'Meta Quest 3', 'Varjo XR-4', 'HoloLens'], ans: 1 },
+                    { q: 'VR құрылғысын таңдағанда неге назар аудару керек?', opts: ['Тек бағасына', 'Автономдылық, баға, контент', 'Тек түсіне', 'Салмағына ғана'], ans: 1 },
+                    { q: 'VR гарнитурасының ажыратымдылығы нені білдіреді?', opts: ['Дыбыс сапасын', 'Кескін анықтығын', 'Салмағын', 'Бағасын'], ans: 1 },
+                    { q: 'VR құрылғыларындағы батарея заряды қанша уақытқа жетеді?', opts: ['30 минут', '2-3 сағат', '10 сағат', 'Апта'], ans: 1 },
+                    { q: 'VR контроллерлері не үшін қажет?', opts: ['Тек сән', 'Виртуалды әлеммен әрекеттесу', 'Дыбыс үшін', 'Жылыту'], ans: 1 },
+                    { q: 'VR гарнитурасын компьютерге қосу үшін не керек?', opts: ['Тек USB', 'HDMI және USB', 'Тек Wi-Fi', 'Bluetooth'], ans: 1 },
+                    { q: 'VR technologyсының болашағы қандай?', opts: ['Жойылады', 'Дами береді', 'Өзгермейді', 'Тек ойындарда қалады'], ans: 1 }
+                ]
+            }
+        ];
+
+        let currentTest = 0, currentQuestion = 0, userAnswers = {}, quizSubmitted = {};
+        window._currentTest = 0;
+
+        const renderTestTabs = () => {
+            const tabsContainer = document.getElementById('testTabs');
+            if (!tabsContainer) return;
+            tabsContainer.innerHTML = quizzes.map((qz, i) => `
+                <button class="test-tab ${currentTest === i ? 'active' : ''}" data-test="${i}" onclick="changeTest(${i})">
+                    ${qz.title.split(':')[0]}
+                </button>
+            `).join('');
+        };
+
+        window.changeTest = (idx) => {
+            currentTest = idx;
+            window._currentTest = idx;
+            currentQuestion = 0;
+            renderTestTabs();
+            window.renderQuiz(idx);
+        };
+
+        window.renderQuiz = (idx) => {
+            currentTest = idx; window._currentTest = idx;
+            if (!userAnswers[idx]) userAnswers[idx] = {};
+            const qz = quizzes[idx], sub = quizSubmitted[idx];
+            let html = `<h3 style="text-align:center; font-size:1.5rem; margin-bottom:2rem; font-weight:700;">${qz.title}</h3>`;
+            
+            if (sub) {
+                let score = 0; 
+                qz.questions.forEach((q, i) => { 
+                    if (userAnswers[idx][i] === q.ans) score++; 
+                });
+                const percentage = Math.round(score / qz.questions.length * 100);
+                let evaluationMessage = "Жақсы нәтиже!";
+                let colorClass = "text-indigo-600";
+                
+                if (percentage >= 85) {
+                    evaluationMessage = "Өте жақсы! Тамаша білім!";
+                    colorClass = "text-emerald-500";
+                } else if (percentage < 50) {
+                    evaluationMessage = "Қайтадан оқып көріңіз.";
+                    colorClass = "text-red-500";
+                }
+
+                html += `
+                <div style="text-align:center; padding: 2rem 0;">
+                    <div style="font-size:1.5rem; margin-bottom:1rem; font-weight:600;">Сенімді нәтиже:</div>
+                    <h2 class="${colorClass}" style="font-size:4rem; font-weight:900; line-height:1; margin-bottom:1rem;">${percentage}%</h2>
+                    <p style="font-size:1.2rem; color:var(--text-secondary); margin-bottom:2rem;">Ұпайыңыз: <strong>${score} / ${qz.questions.length}</strong>. ${evaluationMessage}</p>
+                    <button class="btn btn-glass" onclick="retryQuiz(${idx})">🔄 Қайта тапсыру</button>
+                </div>`;
+            } else {
+                const q = qz.questions[currentQuestion];
+                html += `
+                <div style="margin-bottom:1.5rem;">
+                    <div class="mb-4" style="background:#f1f5f9; padding:0.5rem 1rem; border-radius:50px; display:inline-block; font-size:0.85rem; font-weight:700; color:var(--primary);">СҰРАҚ ${currentQuestion + 1} / ${qz.questions.length}</div>
+                    <h4 style="font-size:1.15rem; font-weight:700; margin-bottom:1.5rem; line-height:1.4;">${q.q}</h4>`;
+                
+                q.opts.forEach((opt, oi) => {
+                    let cls = 'quiz-option';
+                    if (userAnswers[idx][currentQuestion] === oi) cls += ' selected';
+                    html += `<div class="${cls}" onclick="selectAnswer(${idx},${currentQuestion},${oi})"><strong>${String.fromCharCode(65 + oi)})</strong> ${opt}</div>`;
+                });
+                
+                html += `</div><div style="display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;">`;
+                if (currentQuestion > 0) {
+                    html += `<button class="btn btn-glass" onclick="prevQuestion()">← Алдыңғы</button>`;
+                } else {
+                    html += `<div></div>`;
+                }
+                
+                if (currentQuestion < qz.questions.length - 1) {
+                    html += `<button class="btn btn-primary" onclick="nextQuestion()">Келесі →</button>`;
+                } else {
+                    html += `<button class="btn btn-primary" style="background:linear-gradient(135deg, var(--success), #34d399); box-shadow:0 10px 20px rgba(16,185,129,0.3);" onclick="submitQuiz(${idx})">📤 Аяқтау</button>`;
+                }
+                html += `</div>`;
+            }
+            document.getElementById('quizArea').innerHTML = html;
+            
+            document.querySelectorAll('#testTabs .test-tab').forEach(t => {
+                t.classList.toggle('active', parseInt(t.getAttribute('data-test')) === idx);
+            });
+        };
+
+        window.selectAnswer = (ti, qi, oi) => { 
+            if (quizSubmitted[ti]) return; 
+            userAnswers[ti][qi] = oi; 
+            window.renderQuiz(ti); 
+        };
+
+        window.nextQuestion = () => { 
+            if (currentQuestion < quizzes[currentTest].questions.length - 1) { 
+                currentQuestion++; 
+                window.renderQuiz(currentTest); 
+            } 
+        };
+
+        window.prevQuestion = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                window.renderQuiz(currentTest);
+            }
+        };
+
+        window.submitQuiz = (idx) => {
+            quizSubmitted[idx] = true;
+            window.renderQuiz(idx);
+        };
+
+        window.retryQuiz = (idx) => {
+            userAnswers[idx] = {};
+            quizSubmitted[idx] = false;
+            currentQuestion = 0;
+            window.renderQuiz(idx);
+        };
+
+
+        // ========== 360° PANORAMA GALLERY (THREE.JS PROCEDURAL) ==========
+        const panoramas = [
+            { id: 'space', name: '🌌 Ғарыш бекеті', icon: '🌌', desc: 'Ғарыш кеңістігі мен жұлдыздар әлемі' },
+            { id: 'ocean', name: '🐠 Су асты әлемі', icon: '🐠', desc: 'Мұхит тереңдігі мен балықтар патшалығы' },
+            { id: 'cyber', name: '⚡ Кибер кеңістік', icon: '⚡', desc: 'Неонды торлар мен футуристік бөлме' }
+        ];
+
+        const initGalleryList = () => {
+            const grid = document.getElementById('panoGrid');
+            if (!grid) return;
+            grid.innerHTML = panoramas.map(p => `
+                <div class="pano-card" onclick="openPano('${p.id}')">
+                    <div class="pano-thumb">
+                        <span>${p.icon}</span>
+                    </div>
+                    <div class="pano-info">
+                        <div style="font-size:1.1rem; font-weight:700; color:var(--text); margin-bottom:4px;">${p.name}</div>
+                        <div style="font-size:0.85rem; font-weight:500; color:var(--text-light);">${p.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.openPano = (id) => {
+            const modal = document.getElementById('panoModal');
+            modal.classList.add('active');
+            
+            const textureCanvas = generateProceduralPanoTexture(id);
+            const texture = new THREE.CanvasTexture(textureCanvas);
+            
+            const container = document.getElementById('panoViewer');
+            container.innerHTML = ''; // Clean view
+
+            currentPanoScene = new THREE.Scene();
+            currentPanoCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            
+            currentPanoRenderer = new THREE.WebGLRenderer({ antialias: true });
+            currentPanoRenderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(currentPanoRenderer.domElement);
+
+            currentPanoControls = new OrbitControls(currentPanoCamera, currentPanoRenderer.domElement);
+            currentPanoControls.enableZoom = false;
+            currentPanoControls.enablePan = false;
+            currentPanoControls.autoRotate = true;
+            currentPanoControls.autoRotateSpeed = 0.5;
+
+            const geometry = new THREE.SphereGeometry(500, 60, 40);
+            geometry.scale(-1, 1, 1); // Render texture inside sphere
+
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const sphere = new THREE.Mesh(geometry, material);
+            currentPanoScene.add(sphere);
+
+            currentPanoCamera.position.set(0, 0, 0.1);
+
+            window.addEventListener('resize', onPanoResize);
+            animatePano();
+        };
+
+        const onPanoResize = () => {
+            const container = document.getElementById('panoViewer');
+            if (!container || !currentPanoCamera || !currentPanoRenderer) return;
+            currentPanoCamera.aspect = container.clientWidth / container.clientHeight;
+            currentPanoCamera.updateProjectionMatrix();
+            currentPanoRenderer.setSize(container.clientWidth, container.clientHeight);
+        };
+
+        const animatePano = () => {
+            if (!currentPanoScene || !currentPanoRenderer) return;
+            requestAnimationFrame(animatePano);
+            currentPanoControls.update();
+            currentPanoRenderer.render(currentPanoScene, currentPanoCamera);
+        };
+
+        window.closeModal = () => {
+            document.getElementById('panoModal').classList.remove('active');
+            window.removeEventListener('resize', onPanoResize);
+            if (currentPanoRenderer) {
+                currentPanoRenderer.dispose();
+            }
+            currentPanoScene = null;
+            currentPanoCamera = null;
+            currentPanoRenderer = null;
+            currentPanoControls = null;
+        };
+
+        // ========== PROCEDURAL CANVAS TEXTURE GENERATOR ==========
+        const generateProceduralPanoTexture = (id) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            if (id === 'space') {
+                const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                grad.addColorStop(0, '#020024');
+                grad.addColorStop(0.5, '#090979');
+                grad.addColorStop(1, '#00d4ff');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#ffffff';
+                for (let i = 0; i < 200; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const size = Math.random() * 2;
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                for (let i = 0; i < 5; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const rad = 80 + Math.random() * 120;
+                    const radGrad = ctx.createRadialGradient(x, y, 10, x, y, rad);
+                    radGrad.addColorStop(0, 'rgba(233, 30, 99, 0.4)');
+                    radGrad.addColorStop(0.5, 'rgba(156, 39, 176, 0.15)');
+                    radGrad.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = radGrad;
+                    ctx.beginPath();
+                    ctx.arc(x, y, rad, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else if (id === 'ocean') {
+                const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                grad.addColorStop(0, '#00b4db');
+                grad.addColorStop(1, '#0083b0');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+                ctx.lineWidth = 1.5;
+                for (let i = 0; i < 80; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const r = 3 + Math.random() * 12;
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                ctx.fillStyle = 'rgba(0, 60, 80, 0.5)';
+                for (let i = 0; i < 15; i++) {
+                    const x = Math.random() * canvas.width;
+                    const h = 50 + Math.random() * 70;
+                    ctx.beginPath();
+                    ctx.moveTo(x, canvas.height);
+                    ctx.quadraticCurveTo(x + 20, canvas.height - h / 2, x + 5, canvas.height - h);
+                    ctx.quadraticCurveTo(x - 15, canvas.height - h / 2, x, canvas.height);
+                    ctx.fill();
+                }
+            } else {
+                ctx.fillStyle = '#111827';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = '#4f46e5';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < canvas.width; x += 64) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y < canvas.height; y += 64) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+
+                for (let i = 0; i < 40; i++) {
+                    const x = Math.round(Math.random() * (canvas.width / 64)) * 64;
+                    const y = Math.round(Math.random() * (canvas.height / 64)) * 64;
+                    ctx.fillStyle = '#06b6d4';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            return canvas;
+        };
+
+
+        // ========== 3D VR CLASSROOM DESIGNER ==========
+        let wallColor = '#a5b4fc'; 
+        let floorType = 'wood'; 
+
+        const initVRRoom = () => {
+            const panel = document.getElementById('vrUploadPanel');
+            const previewBox = document.getElementById('vrPreviewBox');
+            if (!panel || !previewBox) return;
+
+            // Generate control options
+            panel.innerHTML = `
+                <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:1.5rem; color:var(--primary);">Бөлме Баптаулары</h3>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2 text-slate-700">Қабырға түсі:</label>
+                    <div class="flex gap-2">
+                        <input type="color" id="wallColorPicker" value="${wallColor}" class="w-10 h-10 border-0 rounded cursor-pointer">
+                        <span class="text-xs text-slate-500 self-center">Интерактивті 3D модель жаңартылады</span>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="block text-sm font-bold mb-2 text-slate-700">Еден материалы:</label>
+                    <select id="floorSelect" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl p-2 font-semibold">
+                        <option value="wood" ${floorType === 'wood' ? 'selected' : ''}>🪵 Табиғи Ағаш</option>
+                        <option value="carpet" ${floorType === 'carpet' ? 'selected' : ''}>🧶 Жұмсақ Кілем (Көк)</option>
+                        <option value="tile" ${floorType === 'tile' ? 'selected' : ''}>🧱 Классикалық Плитка</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-bold mb-2 text-slate-700">Класс жиһазын қосу:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button class="btn btn-glass text-xs py-2 px-3 justify-center" id="addDeskBtn">🏫 Оқушы партасы</button>
+                        <button class="btn btn-glass text-xs py-2 px-3 justify-center" id="addTeacherDeskBtn">💼 Мұғалім үстелі</button>
+                        <button class="btn btn-glass text-xs py-2 px-3 justify-center" id="addBoardBtn">🟢 Оқу тақтасы</button>
+                        <button class="btn btn-glass text-xs py-2 px-3 justify-center" id="addVRStandBtn">🥽 VR Стенд</button>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px dashed var(--text-light); padding-top:1.5rem; display:flex; flex-direction:column; gap:8px;">
+                    <button class="btn btn-primary justify-center text-sm" onclick="openVRRoomFullscreen()">👁️ Толық Экранда бақылау</button>
+                    <button class="btn btn-glass justify-center text-sm" id="saveVRRoom">💾 Конфигурацияны Сақтау</button>
+                    <button class="btn btn-glass justify-center text-sm" id="clearVRRoom" style="border-color:var(--danger); color:var(--danger);">🗑️ Тазалау</button>
+                </div>
+            `;
+
+            // Prepare previewBox canvas
+            previewBox.innerHTML = '';
+            
+            vrScene = new THREE.Scene();
+            vrScene.background = new THREE.Color('#0f172a');
+
+            vrCamera = new THREE.PerspectiveCamera(60, previewBox.clientWidth / previewBox.clientHeight, 0.1, 100);
+            vrCamera.position.set(0, 6, 12);
+
+            vrRenderer = new THREE.WebGLRenderer({ antialias: true });
+            vrRenderer.setSize(previewBox.clientWidth, previewBox.clientHeight);
+            vrRenderer.shadowMap.enabled = true;
+            previewBox.appendChild(vrRenderer.domElement);
+
+            vrControls = new OrbitControls(vrCamera, vrRenderer.domElement);
+            vrControls.enableDamping = true;
+            vrControls.dampingFactor = 0.05;
+            vrControls.maxPolarAngle = Math.PI / 2 - 0.05;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            vrScene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(5, 15, 5);
+            dirLight.castShadow = true;
+            vrScene.add(dirLight);
+
+            rebuildClassroom();
+
+            document.getElementById('wallColorPicker').addEventListener('input', (e) => {
+                wallColor = e.target.value;
+                rebuildClassroom();
+            });
+
+            document.getElementById('floorSelect').addEventListener('change', (e) => {
+                floorType = e.target.value;
+                rebuildClassroom();
+            });
+
+            document.getElementById('addDeskBtn').addEventListener('click', () => addRoomObject('desk'));
+            document.getElementById('addTeacherDeskBtn').addEventListener('click', () => addRoomObject('teacherDesk'));
+            document.getElementById('addBoardBtn').addEventListener('click', () => addRoomObject('board'));
+            document.getElementById('addVRStandBtn').addEventListener('click', () => addRoomObject('vrStand'));
+            document.getElementById('clearVRRoom').addEventListener('click', clearClassroom);
+            document.getElementById('saveVRRoom').addEventListener('click', () => {
+                showToastNotification('🎉 VR Бөлме конфигурациясы сәтті сақталды!');
+            });
+
+            window.addEventListener('resize', onVRRoomResize);
+            animateVRRoom();
+        };
+
+        const onVRRoomResize = () => {
+            const previewBox = document.getElementById('vrPreviewBox');
+            const originalBox = document.getElementById('vrPreviewContainer');
+            if (!previewBox || !vrCamera || !vrRenderer) return;
+            
+            if (!isVRFullscreen) {
+                const w = originalBox.clientWidth;
+                const h = 450;
+                vrCamera.aspect = w / h;
+                vrCamera.updateProjectionMatrix();
+                vrRenderer.setSize(w, h);
+            }
+        };
+
+        const rebuildClassroom = () => {
+            const toRemove = [];
+            vrScene.traverse((child) => {
+                if (child.isMesh && child.name && child.name.startsWith('classroom_')) {
+                    toRemove.push(child);
+                }
+            });
+            toRemove.forEach(mesh => vrScene.remove(mesh));
+
+            // Floor reconstruction
+            const floorGeo = new THREE.BoxGeometry(16, 0.2, 12);
+            let floorMat;
+
+            const floorCanvas = document.createElement('canvas');
+            floorCanvas.width = 256;
+            floorCanvas.height = 256;
+            const floorCtx = floorCanvas.getContext('2d');
+
+            if (floorType === 'wood') {
+                floorCtx.fillStyle = '#b45309';
+                floorCtx.fillRect(0, 0, 256, 256);
+                floorCtx.fillStyle = '#92400e';
+                for (let i = 0; i < 256; i += 32) {
+                    floorCtx.fillRect(0, i, 256, 4);
+                }
+            } else if (floorType === 'tile') {
+                floorCtx.fillStyle = '#cbd5e1';
+                floorCtx.fillRect(0, 0, 256, 256);
+                floorCtx.strokeStyle = '#94a3b8';
+                floorCtx.lineWidth = 4;
+                floorCtx.strokeRect(0, 0, 256, 256);
+                floorCtx.strokeRect(0, 0, 128, 128);
+                floorCtx.strokeRect(128, 128, 128, 128);
+            } else { // Carpet
+                floorCtx.fillStyle = '#1e3a8a';
+                floorCtx.fillRect(0, 0, 256, 256);
+                floorCtx.fillStyle = '#2563eb';
+                for (let i = 0; i < 400; i++) {
+                    floorCtx.fillRect(Math.random()*256, Math.random()*256, 2, 2);
+                }
+            }
+
+            const floorTex = new THREE.CanvasTexture(floorCanvas);
+            floorTex.wrapS = THREE.RepeatWrapping;
+            floorTex.wrapT = THREE.RepeatWrapping;
+            floorTex.repeat.set(4, 4);
+            floorMat = new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.8 });
+
+            const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+            floorMesh.position.y = -0.1;
+            floorMesh.receiveShadow = true;
+            floorMesh.name = 'classroom_floor';
+            vrScene.add(floorMesh);
+
+            const wallMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(wallColor), roughness: 0.9 });
+
+            // Back wall
+            const backWallGeo = new THREE.BoxGeometry(16, 5, 0.2);
+            const backWall = new THREE.Mesh(backWallGeo, wallMat);
+            backWall.position.set(0, 2.4, -6);
+            backWall.receiveShadow = true;
+            backWall.name = 'classroom_backwall';
+            vrScene.add(backWall);
+
+            // Left wall
+            const leftWallGeo = new THREE.BoxGeometry(0.2, 5, 12);
+            const leftWall = new THREE.Mesh(leftWallGeo, wallMat);
+            leftWall.position.set(-8, 2.4, 0);
+            leftWall.receiveShadow = true;
+            leftWall.name = 'classroom_leftwall';
+            vrScene.add(leftWall);
+
+            // Right wall
+            const rightWall = new THREE.Mesh(leftWallGeo, wallMat);
+            rightWall.position.set(8, 2.4, 0);
+            rightWall.receiveShadow = true;
+            rightWall.name = 'classroom_rightwall';
+            vrScene.add(rightWall);
+        };
+
+        const addRoomObject = (type) => {
+            const group = new THREE.Group();
+            group.name = `custom_${type}_${Date.now()}`;
+
+            if (type === 'desk') {
+                const topGeo = new THREE.BoxGeometry(2, 0.1, 1.2);
+                const woodMat = new THREE.MeshStandardMaterial({ color: 0xca8a04, roughness: 0.6 });
+                const deskTop = new THREE.Mesh(topGeo, woodMat);
+                deskTop.position.y = 1.2;
+                deskTop.castShadow = true;
+                group.add(deskTop);
+
+                const legGeo = new THREE.CylinderGeometry(0.05, 0.05, 1.2);
+                const steelMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.8 });
+                
+                const legPositions = [
+                    [-0.9, 0.6, -0.5],
+                    [0.9, 0.6, -0.5],
+                    [-0.9, 0.6, 0.5],
+                    [0.9, 0.6, 0.5]
+                ];
+
+                legPositions.forEach(pos => {
+                    const leg = new THREE.Mesh(legGeo, steelMat);
+                    leg.position.set(pos[0], pos[1], pos[2]);
+                    leg.castShadow = true;
+                    group.add(leg);
+                });
+
+                group.position.set(-4 + Math.random() * 8, 0, -2 + Math.random() * 4);
+
+            } else if (type === 'teacherDesk') {
+                const topGeo = new THREE.BoxGeometry(3, 0.15, 1.6);
+                const luxuryWoodMat = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.4 });
+                const deskTop = new THREE.Mesh(topGeo, luxuryWoodMat);
+                deskTop.position.y = 1.3;
+                deskTop.castShadow = true;
+                group.add(deskTop);
+
+                const sideGeo = new THREE.BoxGeometry(0.15, 1.3, 1.6);
+                const leftSide = new THREE.Mesh(sideGeo, luxuryWoodMat);
+                leftSide.position.set(-1.4, 0.65, 0);
+                leftSide.castShadow = true;
+                group.add(leftSide);
+
+                const rightSide = leftSide.clone();
+                rightSide.position.x = 1.4;
+                group.add(rightSide);
+
+                const frontGeo = new THREE.BoxGeometry(2.8, 1.1, 0.1);
+                const frontSide = new THREE.Mesh(frontGeo, luxuryWoodMat);
+                frontSide.position.set(0, 0.75, -0.7);
+                frontSide.castShadow = true;
+                group.add(frontSide);
+
+                group.position.set(0, 0, -4.5);
+
+            } else if (type === 'board') {
+                const boardFrameGeo = new THREE.BoxGeometry(6.2, 3.2, 0.1);
+                const boardGeo = new THREE.BoxGeometry(6, 3, 0.12);
+                
+                const frameMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+                const chalkboardMat = new THREE.MeshStandardMaterial({ color: 0x064e3b, roughness: 0.9 });
+
+                const frame = new THREE.Mesh(boardFrameGeo, frameMat);
+                const mainBoard = new THREE.Mesh(boardGeo, chalkboardMat);
+                
+                frame.position.set(0, 2.5, -5.8);
+                mainBoard.position.set(0, 2.5, -5.78);
+                
+                group.add(frame);
+                group.add(mainBoard);
+                group.position.set(0, 0, 0);
+
+            } else if (type === 'vrStand') {
+                const baseGeo = new THREE.CylinderGeometry(0.5, 0.6, 1.6, 16);
+                const neonMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, emissive: 0x0891b2 });
+                const base = new THREE.Mesh(baseGeo, neonMat);
+                base.position.y = 0.8;
+                base.castShadow = true;
+                group.add(base);
+
+                const holoGeo = new THREE.SphereGeometry(0.35, 16, 16);
+                const holoMat = new THREE.MeshStandardMaterial({ color: 0x4f46e5, emissive: 0x4f46e5, transparent: true, opacity: 0.7 });
+                const holo = new THREE.Mesh(holoGeo, holoMat);
+                holo.position.y = 2.1;
+                group.add(holo);
+
+                group.position.set(-6, 0, 3);
+            }
+
+            vrScene.add(group);
+            vrObjects.push(group);
+        };
+
+        const clearClassroom = () => {
+            vrObjects.forEach(obj => vrScene.remove(obj));
+            vrObjects = [];
+        };
+
+        const animateVRRoom = () => {
+            if (!vrScene || !vrRenderer) return;
+            requestAnimationFrame(animateVRRoom);
+            
+            vrObjects.forEach(obj => {
+                if (obj.name.includes('vrStand')) {
+                    const holo = obj.children[1];
+                    if (holo) {
+                        holo.rotation.y += 0.02;
+                        holo.position.y = 2.1 + Math.sin(Date.now() * 0.003) * 0.1;
+                    }
+                }
+            });
+
+            vrControls.update();
+            vrRenderer.render(vrScene, vrCamera);
+        };
+
+        // ========== FULLSCREEN VR VIEWING METHODS ==========
+        window.openVRRoomFullscreen = () => {
+            const modal = document.getElementById('vrRoomFullscreenModal');
+            const container = document.getElementById('vrRoomFullscreenContainer');
+            
+            if (!vrRenderer) return;
+
+            modal.classList.add('active');
+            isVRFullscreen = true;
+
+            // Shift canvas parent dynamically to the modal viewport
+            container.appendChild(vrRenderer.domElement);
+            
+            // Re-render layout with correct dimensions
+            vrRenderer.setSize(window.innerWidth, window.innerHeight);
+            vrCamera.aspect = window.innerWidth / window.innerHeight;
+            vrCamera.updateProjectionMatrix();
+
+            // Setup temporary control options for fullscreen
+            vrControls.domElement = container;
+        };
+
+        window.closeVRRoomFullscreen = () => {
+            const modal = document.getElementById('vrRoomFullscreenModal');
+            const previewBox = document.getElementById('vrPreviewBox');
+            
+            modal.classList.remove('active');
+            isVRFullscreen = false;
+
+            // Move the live WebGL Canvas back to classroom preview block
+            previewBox.appendChild(vrRenderer.domElement);
+
+            // Re-adjust camera and size back to normal container bounding box
+            const w = previewBox.clientWidth;
+            const h = 450;
+            vrRenderer.setSize(w, h);
+            vrCamera.aspect = w / h;
+            vrCamera.updateProjectionMatrix();
+
+            // Re-link control elements
+            vrControls.domElement = vrRenderer.domElement;
+        };
+
+
+        // =====================================================================
+        // ========== CUSTOM PHOTO CONNECTED VIRTUAL TOUR ==========
+        // =====================================================================
+
+        // Fallback procedural room textures
+        const generateProceduralRoomA = () => {
+            // Room A: Cyber Corridor (Warm tones)
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, '#111827');
+            grad.addColorStop(0.5, '#311042');
+            grad.addColorStop(1, '#030712');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Tech lines
+            ctx.strokeStyle = '#ec4899';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 128) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 64) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Big futuristic texts on walls
+            ctx.fillStyle = 'rgba(236, 72, 153, 0.4)';
+            ctx.font = 'bold 24px Inter';
+            ctx.fillText('СЫНЫП БӨЛМЕСІНЕ ӨТУ', 150, 240);
+            ctx.fillText('ПОРТАЛ ОСЫ БАҒЫТТА →', 550, 240);
+
+            // Glow spheres
+            for (let i = 0; i < 20; i++) {
+                ctx.fillStyle = 'rgba(236, 72, 153, 0.6)';
+                ctx.beginPath();
+                ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 4 + Math.random() * 8, 0, Math.PI*2);
+                ctx.fill();
+            }
+            return canvas;
+        };
+
+        const generateProceduralRoomB = () => {
+            // Room B: Cyber Science Lab (Cold tones)
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            grad.addColorStop(0, '#022c22');
+            grad.addColorStop(0.5, '#065f46');
+            grad.addColorStop(1, '#020617');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Hexagonal grid mockup
+            ctx.strokeStyle = '#34d399';
+            ctx.lineWidth = 1.5;
+            for (let x = 0; x < canvas.width; x += 96) {
+                ctx.beginPath();
+                ctx.arc(x, 256, 40, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Glowing panels
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.3)';
+            ctx.fillRect(200, 150, 180, 220);
+            ctx.fillRect(650, 150, 180, 220);
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px Inter';
+            ctx.fillText('ХИМИЯ-БИОЛОГИЯ VR ЛАБОРАТОРИЯСЫ', 220, 120);
+            ctx.fillText('← КЕРІ ҚАЙТУ Порталы', 670, 310);
+
+            return canvas;
+        };
+
+        const initDoublePanoSystem = () => {
+            const container = document.getElementById('customPanoViewer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Generate procedural textures initially if not uploaded
+            if (!panoATexture) {
+                const canvasA = generateProceduralRoomA();
+                panoATexture = new THREE.CanvasTexture(canvasA);
+            }
+            if (!panoBTexture) {
+                const canvasB = generateProceduralRoomB();
+                panoBTexture = new THREE.CanvasTexture(canvasB);
+            }
+
+            customPanoScene = new THREE.Scene();
+            customPanoCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            
+            customPanoRenderer = new THREE.WebGLRenderer({ antialias: true });
+            customPanoRenderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(customPanoRenderer.domElement);
+
+            customPanoControls = new OrbitControls(customPanoCamera, customPanoRenderer.domElement);
+            customPanoControls.enableZoom = true;
+            customPanoControls.enablePan = false;
+            customPanoControls.autoRotate = true;
+            customPanoControls.autoRotateSpeed = 0.25;
+
+            // Invert sphere to render panorama on the inside
+            const geometry = new THREE.SphereGeometry(500, 60, 40);
+            geometry.scale(-1, 1, 1);
+
+            const activeTex = (activeRoom === 'A') ? panoATexture : panoBTexture;
+            const material = new THREE.MeshBasicMaterial({ map: activeTex });
+            const mainSphere = new THREE.Mesh(geometry, material);
+            mainSphere.name = "skyboxSphere";
+            customPanoScene.add(mainSphere);
+
+            // Add the Interactive 3D Portal Node
+            createPortalNode();
+
+            customPanoCamera.position.set(0, 0, 0.1);
+
+            // Register Raycasting and Click event listener
+            customPanoRenderer.domElement.addEventListener('pointerdown', onPanoPointerDown);
+
+            window.addEventListener('resize', onCustomPanoResize);
+            animateCustomPano();
+        };
+
+        const createPortalNode = () => {
+            // Remove previous portal mesh if exists
+            if (portalMesh) {
+                customPanoScene.remove(portalMesh);
+            }
+
+            // Create portal group for visual styling
+            portalMesh = new THREE.Group();
+            
+            // Outer glowing ring
+            const ringGeo = new THREE.RingGeometry(1.8, 2.2, 32);
+            const ringColor = (activeRoom === 'A') ? 0x06b6d4 : 0xec4899; // cyan for room A portal, pink for room B
+            const ringMat = new THREE.MeshBasicMaterial({ color: ringColor, side: THREE.DoubleSide, transparent: true, opacity: 0.8 });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            portalMesh.add(ring);
+
+            // Inner teleportation target center
+            const centerGeo = new THREE.SphereGeometry(1.2, 16, 16);
+            const centerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4, wireframe: true });
+            const center = new THREE.Mesh(centerGeo, centerMat);
+            portalMesh.add(center);
+
+            // Positioning portal inside skybox depending on current room node
+            if (activeRoom === 'A') {
+                // Portal A: placed ahead pointing to Room B
+                portalMesh.position.set(15, -2, -10);
+                portalMesh.lookAt(0, 0, 0);
+            } else {
+                // Portal B: placed behind pointing back to Room A
+                portalMesh.position.set(-15, -2, 10);
+                portalMesh.lookAt(0, 0, 0);
+            }
+
+            portalMesh.name = "teleport_portal";
+            customPanoScene.add(portalMesh);
+        };
+
+        let pointerDownX = 0, pointerDownY = 0;
+        const onPanoPointerDown = (event) => {
+            pointerDownX = event.clientX;
+            pointerDownY = event.clientY;
+            customPanoRenderer.domElement.addEventListener('pointerup', onPanoPointerUp);
+        };
+
+        const onPanoPointerUp = (event) => {
+            customPanoRenderer.domElement.removeEventListener('pointerup', onPanoPointerUp);
+            
+            // Calculate movement distance to prevent triggering portals during drag look-around
+            const diffX = Math.abs(event.clientX - pointerDownX);
+            const diffY = Math.abs(event.clientY - pointerDownY);
+            if (diffX > 5 || diffY > 5) return; // User was dragging, do not teleport
+
+            // Normalize device coordinates
+            const rect = customPanoRenderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, customPanoCamera);
+
+            // Check intersection with portal children mesh elements
+            const intersects = raycaster.intersectObjects(portalMesh.children);
+
+            if (intersects.length > 0) {
+                // Teleport portal clicked! Trigger smooth room switch transition
+                triggerRoomTransition();
+            }
+        };
+
+        const triggerRoomTransition = () => {
+            const overlay = document.getElementById('portalOverlay');
+            if (!overlay) return;
+
+            // Step 1: Fade to black
+            overlay.style.opacity = '1';
+
+            setTimeout(() => {
+                // Step 2: Switch active textures and update UI elements
+                if (activeRoom === 'A') {
+                    activeRoom = 'B';
+                    document.getElementById('activeRoomLabel').textContent = '2-ші бөлме (Зертхана)';
+                    document.getElementById('activeRoomLabel').className = "bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full";
+                    showToastNotification('🔬 2-ші бөлмеге сәтті өттіңіз (Зертхана)');
+                } else {
+                    activeRoom = 'A';
+                    document.getElementById('activeRoomLabel').textContent = '1-ші бөлме (Коридор)';
+                    document.getElementById('activeRoomLabel').className = "bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full";
+                    showToastNotification('🚪 1-ші бөлмеге қайта оралдыңыз (Коридор)');
+                }
+
+                // Apply correct texture map to the inverted skybox sphere
+                const skySphere = customPanoScene.getObjectByName("skyboxSphere");
+                if (skySphere) {
+                    skySphere.material.map = (activeRoom === 'A') ? panoATexture : panoBTexture;
+                    skySphere.material.needsUpdate = true;
+                }
+
+                // Recreate and re-position portal inside the new room space
+                createPortalNode();
+
+                // Rotate camera slightly to direct sight towards the next portal destination
+                if (activeRoom === 'A') {
+                    customPanoCamera.position.set(0, 0, 0.1);
+                    customPanoControls.target.set(15, -2, -10);
+                } else {
+                    customPanoCamera.position.set(0, 0, 0.1);
+                    customPanoControls.target.set(-15, -2, 10);
+                }
+
+                // Step 3: Fade screen back to fully transparent view
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                }, 150);
+
+            }, 500); // Trigger mid-point switch after black overlay finishes animation
+        };
+
+        // UI trigger buttons for room switching directly
+        document.getElementById('btnSwitchToA').addEventListener('click', () => {
+            if (activeRoom !== 'A') {
+                triggerRoomTransition();
+            }
+        });
+        document.getElementById('btnSwitchToB').addEventListener('click', () => {
+            if (activeRoom !== 'B') {
+                triggerRoomTransition();
+            }
+        });
+
+        const onCustomPanoResize = () => {
+            const container = document.getElementById('customPanoViewer');
+            if (!container || !customPanoCamera || !customPanoRenderer) return;
+            customPanoCamera.aspect = container.clientWidth / container.clientHeight;
+            customPanoCamera.updateProjectionMatrix();
+            customPanoRenderer.setSize(container.clientWidth, container.clientHeight);
+        };
+
+        const animateCustomPano = () => {
+            if (!customPanoScene || !customPanoRenderer) return;
+            requestAnimationFrame(animateCustomPano);
+
+            // Animate 3D Portal Ring pulsing and rotating effects
+            if (portalMesh) {
+                portalMesh.rotation.z += 0.01;
+                const pulse = 1.0 + Math.sin(Date.now() * 0.005) * 0.08;
+                portalMesh.scale.set(pulse, pulse, pulse);
+            }
+
+            customPanoControls.update();
+            customPanoRenderer.render(customPanoScene, customPanoCamera);
+        };
+
+        const handlePanoUpload = (file, targetNode) => {
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToastNotification('⚠️ Тек кескін (сурет) форматтарын таңдаңыз!');
+                return;
+            }
+
             const reader = new FileReader();
-            reader.onload = function(e){
-                const uniqueId = 'gimg-' + Date.now() + Math.random();
-                const item = document.createElement('div');
-                item.className = 'gallery-item'; item.id = uniqueId;
-                item.innerHTML = `<div class="gallery-img-wrap"><img src="${e.target.result}" alt="${file.name}"></div><div class="gallery-caption">📷 ${file.name} <button class="delete-img-btn" onclick="deleteGalleryItem('${uniqueId}')">🗑️</button></div>`;
-                grid.prepend(item);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const texture = new THREE.Texture(img);
+                    texture.needsUpdate = true;
+
+                    if (targetNode === 'A') {
+                        panoATexture = texture;
+                        document.getElementById('statusA').innerHTML = '✅ Қолданушы бөлме суреті жүктелді';
+                        document.getElementById('statusA').className = "text-xs text-green-600 mt-2 font-semibold text-center";
+                    } else {
+                        panoBTexture = texture;
+                        document.getElementById('statusB').innerHTML = '✅ Қолданушы бөлме суреті жүктелді';
+                        document.getElementById('statusB').className = "text-xs text-green-600 mt-2 font-semibold text-center";
+                    }
+
+                    // Reload connected environment scene
+                    initDoublePanoSystem();
+                    showToastNotification(`🎉 ${targetNode === 'A' ? '1-ші' : '2-ші'} панорама суреті сәтті жаңартылды!`);
+                };
+                img.src = event.target.result;
             };
             reader.readAsDataURL(file);
-        }
-        event.target.value = '';
-    };
+        };
 
-    // Ресурстар
-    document.getElementById('resourcesGrid').innerHTML = [
-        {title:'Google Arts & Culture',url:'https://artsandculture.google.com/'},{title:'Labster',url:'https://www.labster.com/'},
-        {title:'CoSpaces Edu',url:'https://cospaces.io/edu/'},{title:'Nearpod',url:'https://nearpod.com/'},
-        {title:'Meta Quest',url:'https://www.meta.com/quest/'},{title:'Khan Academy',url:'https://www.khanacademy.org/'}
-    ].map(r=>`<a href="${r.url}" target="_blank" style="text-decoration:none;color:inherit;"><div style="background:var(--surface);border-radius:var(--radius-sm);padding:1.4rem;border:1px solid var(--border);">🏛️ ${r.title}</div></a>`).join('');
+        // Register custom listeners for both Drag and Drop zones
+        const setupDropzones = (dropzoneId, inputId, nodeChar) => {
+            const dropzone = document.getElementById(dropzoneId);
+            const input = document.getElementById(inputId);
 
-    // Белсенді сілтеме
-    const secIds = ['teoriya','testter','tapsyrmalar','galereya','vr-room','resurstar'];
-    window.addEventListener('scroll',()=>{
-        let cur='';
-        secIds.forEach(id=>{ const s=document.getElementById(id); if(s && window.scrollY>=s.offsetTop-150) cur=id; });
-        document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
-    });
-</script>
+            if (!dropzone || !input) return;
+
+            input.addEventListener('change', (e) => {
+                handlePanoUpload(e.target.files[0], nodeChar);
+            });
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('border-indigo-600', 'bg-indigo-50/50');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('border-indigo-600', 'bg-indigo-50/50');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('border-indigo-600', 'bg-indigo-50/50');
+                if (e.dataTransfer.files.length > 0) {
+                    handlePanoUpload(e.dataTransfer.files[0], nodeChar);
+                }
+            });
+        };
+
+        setupDropzones('dropAreaA', 'customPanoInputA', 'A');
+        setupDropzones('dropAreaB', 'customPanoInputB', 'B');
+
+        // Reset virtual tour parameters back to default state
+        document.getElementById('resetCustomPanoBtn').addEventListener('click', () => {
+            panoATexture = null;
+            panoBTexture = null;
+            activeRoom = 'A';
+            document.getElementById('statusA').innerHTML = '💻 Дайын процедуралық "Коридор" қолданылуда';
+            document.getElementById('statusA').className = "text-xs text-indigo-600 mt-2 font-semibold text-center";
+            document.getElementById('statusB').innerHTML = '💻 Дайын процедуралық "Зертхана" қолданылуда';
+            document.getElementById('statusB').className = "text-xs text-emerald-600 mt-2 font-semibold text-center";
+            document.getElementById('activeRoomLabel').textContent = '1-ші бөлме (Коридор)';
+            document.getElementById('activeRoomLabel').className = "bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full";
+            initDoublePanoSystem();
+            showToastNotification('🗑️ Қолданушы панорамалары тазартылды. Дайын үлгілер қалпына келтірілді!');
+        });
+
+
+        // ========== UTILITY SYSTEM TOASTS ==========
+        const showToastNotification = (msg) => {
+            const notice = document.createElement('div');
+            notice.style.cssText = 'position:fixed; bottom:20px; right:20px; background:rgba(15, 23, 42, 0.9); border:1px solid rgba(255,255,255,0.15); color:white; padding:1rem 2rem; border-radius:100px; z-index:9000; font-weight:700; font-size: 0.9rem; box-shadow:0 10px 30px rgba(0,0,0,0.3); backdrop-filter:blur(10px); animation: fadeSlide 0.3s ease;';
+            notice.textContent = msg;
+            document.body.appendChild(notice);
+            setTimeout(() => {
+                notice.style.animation = 'fadeSlide 0.3s ease reverse';
+                setTimeout(() => notice.remove(), 300);
+            }, 3000);
+        };
+
+
+        // Window setup triggers
+        window.onload = function () {
+            navigateTo('home');
+        };
+    </script>
 </body>
 </html>
